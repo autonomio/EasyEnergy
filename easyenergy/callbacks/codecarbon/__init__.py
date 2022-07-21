@@ -1,1 +1,1 @@
-from .KerasCallbacks.PerEpochCallback import PerEpochCallbackfrom .KerasCallbacks.TrainCallback import TrainCallback
+from .KerasCallbacks.PerEpochCallback import PerEpochCallbackfrom .KerasCallbacks.TrainCallback import TrainCallbackfrom .KerasCallbacks.PredictCallback import PredictCallbackfrom .KerasCallbacks.TestCallback import TestCallback
