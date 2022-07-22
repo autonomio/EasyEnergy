@@ -1,4 +1,4 @@
-from easyenergy import PredictCallback
+from easyenergy.callbacks.keras import TestCallback
 import tensorflow as tf
 
 mnist = tf.keras.datasets.mnist
@@ -20,7 +20,5 @@ loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
 model.compile(optimizer="adam", loss=loss_fn, metrics=["accuracy"])
 
-
-cb = PredictCallback()
-
-pred = model.predict(x_test, callbacks=[cb])
+cb = TestCallback()
+test = model.evaluate(x_test, y_test, callbacks=[cb])

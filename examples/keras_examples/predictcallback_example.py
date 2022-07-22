@@ -1,4 +1,4 @@
-from easyenergy import PerEpochCallback
+from easyenergy.callbacks.keras import PredictCallback
 import tensorflow as tf
 
 mnist = tf.keras.datasets.mnist
@@ -21,5 +21,6 @@ loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 model.compile(optimizer="adam", loss=loss_fn, metrics=["accuracy"])
 
 
-cb = PerEpochCallback()
-history = model.fit(x_train, y_train, epochs=3, callbacks=[cb])
+cb = PredictCallback()
+
+pred = model.predict(x_test, callbacks=[cb])
