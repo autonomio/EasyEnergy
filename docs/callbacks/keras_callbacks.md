@@ -19,7 +19,7 @@ Usage:
 ```
 from easyenergy.callbacks.keras import PerEpochCallback
 cb = PerEpochCallback()
-history = model.fit(x_train, y_train, epochs=3, callbacks=[cb])
+history = model.fit(x_train, y_train, epochs=epochs, callbacks=[cb])
 ```
 
 ### 2) TrainCallback
@@ -36,7 +36,7 @@ Usage:
 ```
 from easyenergy.callbacks.keras import TrainCallback
 cb = TrainCallback()
-history = model.fit(x_train, y_train, epochs=3, callbacks=[cb])
+history = model.fit(x_train, y_train, epochs=epochs, callbacks=[cb])
 ```
 
 ### 3) TrainBatchCallback
