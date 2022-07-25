@@ -130,7 +130,7 @@ Usage:
 ```
 from easyenergy.callbacks.keras import PredictBatchCallback
 cb = PredictBatchCallback()
-pred = model.predict(x_test, batch_size, callbacks=[cb])
+pred = model.predict(x_test, batch_size=128, callbacks=[cb])
 
 ```
 
