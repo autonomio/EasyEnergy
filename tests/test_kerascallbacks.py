@@ -3,9 +3,13 @@ import numpy as np
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import LSTM, Dense, Dropout
 from easyenergy.callbacks.keras import TrainCallback
-from easyenergy.callbacks.keras import PerEpochCallback
 from easyenergy.callbacks.keras import PredictCallback
+from easyenergy.callbacks.keras import TestCallback
 
+from easyenergy.callbacks.keras import PerEpochCallback
+
+from easyenergy.callbacks.keras import TrainBatchCallback
+from easyenergy.callbacks.keras import PredictBatchCallback
 
 data = pd.read_csv('crypto_tradinds_100000.csv')
 btc_data = data[data['ticker'] == 'BTC']
@@ -77,30 +81,52 @@ model.compile(optimizer='adam', loss='mse')
 
 def test_traincallback():
 
-    cb1 = TrainCallback()
+    cb = TrainCallback()
     model.fit(x, y,
               batch_size=512,
               validation_data=(x_val, y_val),
               epochs=25, shuffle=False, verbose=2,
-              callbacks=[cb1])
+              callbacks=[cb])
     model.save('bitcoin_model.h5')
+
+
+def test_testcallback():
+    model = load_model('bitcoin_model.h5')
+    cb = TestCallback()
+    model.evaluate(x_val, y_val, callbacks=[cb])
+
+
+def test_predictcallback():
+    model = load_model('bitcoin_model.h5')
+    cb = PredictCallback()
+    model.predict(x_val, callbacks=[cb])
 
 
 def test_perepochcallback():
     cb = PerEpochCallback()
     model.fit(x, y,
-              batch_size=512,
               validation_data=(x_val, y_val),
               epochs=2, shuffle=False, verbose=2,
               callbacks=[cb])
 
 
-def test_predictcallback():
-    model = load_model('bitcoin_model.h5')
-    cb2 = PredictCallback()
-    model.predict(x_val, callbacks=[cb2])
+def test_trainbatchcallback():
+    cb = TrainBatchCallback()
+    model.fit(x, y,
+              batch_size=4096,
+              validation_data=(x_val, y_val),
+              epochs=25, shuffle=False, verbose=2,
+              callbacks=[cb])
+
+
+def test_predictbatchcallback():
+    cb = PredictBatchCallback()
+    model.evaluate(x_val, y_val, batch_size=4096, callbacks=[cb])
 
 
 test_traincallback()
-test_perepochcallback()
+test_testcallback()
 test_predictcallback()
+test_perepochcallback()
+test_trainbatchcallback()
+test_predictbatchcallback()
