@@ -20,7 +20,7 @@ DOWNLOAD_URL = 'https://github.com/autonomio/EasyEnergy/'
 VERSION = '0.0.1'
 
 
-install_requires = ['pyrapl',
+install_requires = ['tensorflow',
                     'codecarbon']
 
 
