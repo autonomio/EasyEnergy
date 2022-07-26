@@ -21,4 +21,4 @@ class PredictBatchCallback(Callback):
         self.codecarbon_tracker.start()
 
     def on_predict_batch_end(self, batch, logs=None):
-        self.codecarbon_tracker.flush()
+        self.codecarbon_tracker.stop()

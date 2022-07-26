@@ -21,4 +21,4 @@ class TrainCallback(Callback):
         self.codecarbon_tracker.start()
 
     def on_train_end(self, logs=None):
-        self.codecarbon_tracker.flush()
+        self.codecarbon_tracker.stop()
