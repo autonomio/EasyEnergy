@@ -53,7 +53,7 @@ Usage:
 ```
 from easyenergy.callbacks.keras import TrainBatchCallback
 cb = TrainCallback()
-history = model.fit(x_train, y_train, epochs=3, batch_size=128, callbacks=[cb])
+history = model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size, callbacks=[cb])
 ```
 
 ## Test Callbacks
@@ -90,7 +90,7 @@ Usage:
 ```
 from easyenergy.callbacks.keras import TestBatchCallback
 cb = TestBatchCallback()
-test = model.evaluate(x_test, y_test, batch_size=128,
+test = model.evaluate(x_test, y_test, batch_size=batch_size,
                       callbacks=[cb])
 ```
 
@@ -130,7 +130,7 @@ Usage:
 ```
 from easyenergy.callbacks.keras import PredictBatchCallback
 cb = PredictBatchCallback()
-pred = model.predict(x_test, batch_size=128, callbacks=[cb])
+pred = model.predict(x_test, batch_size=batch_size, callbacks=[cb])
 
 ```
 
