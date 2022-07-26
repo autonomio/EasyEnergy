@@ -12,7 +12,8 @@ from easyenergy.callbacks.keras import TrainBatchCallback
 from easyenergy.callbacks.keras import PredictBatchCallback
 url = 'https://raw.githubusercontent.com/autonomio/EasyEnergy/main/tests/'
 url = url + 'crypto_tradinds_100000.csv'
-url = url + '?token=GHSAT0AAAAAABVSLYXNZRFMUVRWRFN3EKB4YXADV7A'
+url = url + '?token=GHSAT0AAAAAABVSLYXNDWWUVR3WZM7MNO7GYXAJCNA'
+
 data = pd.read_csv(url)
 btc_data = data[data['ticker'] == 'BTC']
 btc_data_0 = btc_data[data['price_btc'] == 0]
