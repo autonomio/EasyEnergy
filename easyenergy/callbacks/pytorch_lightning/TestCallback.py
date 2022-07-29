@@ -13,7 +13,7 @@ class TestCallback(Callback):
         self.output_file = filename
         self.output_dir = output_dir
 
-    def on_test_begin(self, logs=None):
+    def on_test_start(self, logs=None):
         self.codecarbon_tracker = EmissionsTracker(
             output_dir=self.output_dir,
             output_file=self.output_file
