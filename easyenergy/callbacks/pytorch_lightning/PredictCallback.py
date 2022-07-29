@@ -12,13 +12,13 @@ class PredictCallback(Callback):
         filename = filename + '_predict_results.csv'
         self.output_file = filename
         self.output_dir = output_dir
-
-    def on_predict_begin(self, logs=None):
         self.codecarbon_tracker = EmissionsTracker(
             output_dir=self.output_dir,
             output_file=self.output_file
             )
+
+    def on_predict_begin(self, trainer, pl_module, logs=None):
         self.codecarbon_tracker.start()
 
-    def on_predict_end(self, logs=None):
+    def on_predict_end(self, trainer, pl_module, logs=None):
         self.codecarbon_tracker.stop()

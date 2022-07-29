@@ -12,12 +12,13 @@ class TrainCallback(Callback):
         filename = filename + '_train_results.csv'
         self.output_dir = output_dir
         self.output_file = filename
-
-    def on_train_start(self, trainer, pl_module):
         self.codecarbon_tracker = EmissionsTracker(
             output_dir=self.output_dir,
             output_file=self.output_file
         )
+
+    def on_train_start(self, trainer, pl_module):
+
         self.codecarbon_tracker.start()
 
     def on_train_end(self, trainer, pl_module):
