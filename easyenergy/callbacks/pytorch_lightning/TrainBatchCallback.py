@@ -13,12 +13,14 @@ class TrainBatchCallback(Callback):
         self.output_file = filename
         self.output_dir = output_dir
 
-    def on_train_batch_start(self, batch, batch_idx):
+    def on_train_batch_start(self, trainer, pl_module,
+                             batch, batch_idx):
         self.codecarbon_tracker = EmissionsTracker(
             output_dir=self.output_dir,
             output_file=self.output_file
             )
         self.codecarbon_tracker.start()
 
-    def on_train_epoch_end(self,  batch, batch_idx, logs=None):
+    def on_train_batch_end(self, trainer, pl_module,
+                           batch, batch_idx, logs=None):
         self.codecarbon_tracker.stop()
