@@ -20,5 +20,5 @@ class PerEpochCallback(Callback):
             )
         self.codecarbon_tracker.start()
 
-    def on_train_epoch_end(self, logs=None):
+    def on_train_epoch_end(self,  trainer, pl_module, logs=None):
         self.codecarbon_tracker.stop()
