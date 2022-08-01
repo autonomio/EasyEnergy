@@ -9,12 +9,12 @@ class PredictBatchCallback(Callback):
         if not os.path.exists(output_dir):
             os.mkdir(output_dir)
         filename = time.strftime('%D%H%M%S').replace('/', '')
-        filename = filename + '_train_batch_results.csv'
+        filename = filename + '_predict_batch_results.csv'
         self.output_file = filename
         self.output_dir = output_dir
 
     def on_predict_batch_start(self, trainer, pl_module,
-                               batch, batch_idx):
+                               batch, batch_idx, dataloader_idx):
         self.codecarbon_tracker = EmissionsTracker(
             output_dir=self.output_dir,
             output_file=self.output_file
@@ -22,5 +22,6 @@ class PredictBatchCallback(Callback):
         self.codecarbon_tracker.start()
 
     def on_predict_batch_end(self, trainer, pl_module,
-                             batch, batch_idx, logs=None):
+                             batch, batch_idx, dataloader_idx,
+                             logs=None):
         self.codecarbon_tracker.stop()
