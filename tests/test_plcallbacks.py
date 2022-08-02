@@ -7,9 +7,10 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision.datasets import MNIST
 from easyenergy.callbacks.pytorch_lightning import TrainCallback
+from easyenergy.callbacks.pytorch_lightning import TrainBatchCallback
+
 
 PATH_DATASETS = os.environ.get("PATH_DATASETS", ".")
-BATCH_SIZE = 256 if torch.cuda.is_available() else 64
 
 
 class MNISTModel(LightningModule):
@@ -38,13 +39,13 @@ cb = TrainCallback()
 train_ds = MNIST(PATH_DATASETS, train=True,
                  download=True,
                  transform=transforms.ToTensor())
-train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE)
 
 
 def test_traincallback():
 
     cb = TrainCallback()
-
+    BATCH_SIZE = 256
+    train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE)
     trainer = Trainer(
         accelerator="auto",
         devices=None,
@@ -54,3 +55,17 @@ def test_traincallback():
 
     trainer.fit(mnist_model, train_loader)
     trainer.save_checkpoint('mnist.ckpt')
+
+
+def test_trainbatchcallback():
+    BATCH_SIZE = 10000
+    train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE)
+    cb = TrainBatchCallback()
+    trainer = Trainer(
+        accelerator="auto",
+        devices=None,
+        max_epochs=2,
+        callbacks=[TQDMProgressBar(refresh_rate=20), cb],
+    )
+
+    trainer.fit(mnist_model, train_loader)
