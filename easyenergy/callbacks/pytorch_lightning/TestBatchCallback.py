@@ -9,7 +9,7 @@ class TestBatchCallback(Callback):
         if not os.path.exists(output_dir):
             os.mkdir(output_dir)
         filename = time.strftime('%D%H%M%S').replace('/', '')
-        filename = filename + '_predict_batch_results.csv'
+        filename = filename + '_test_batch_results.csv'
         self.output_file = filename
         self.output_dir = output_dir
 
