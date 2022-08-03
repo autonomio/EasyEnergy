@@ -8,6 +8,8 @@ from torchvision import transforms
 from torchvision.datasets import MNIST
 from easyenergy.callbacks.pytorch_lightning import TrainCallback
 from easyenergy.callbacks.pytorch_lightning import TrainBatchCallback
+from easyenergy.callbacks.pytorch_lightning import PredictCallback
+from easyenergy.callbacks.pytorch_lightning import PredictBatchCallback
 
 
 PATH_DATASETS = os.environ.get("PATH_DATASETS", ".")
@@ -40,6 +42,10 @@ train_ds = MNIST(PATH_DATASETS, train=True,
                  download=True,
                  transform=transforms.ToTensor())
 
+test_ds = MNIST(PATH_DATASETS, train=False,
+                download=False,
+                transform=transforms.ToTensor())
+
 
 def test_traincallback():
 
@@ -69,3 +75,31 @@ def test_trainbatchcallback():
     )
 
     trainer.fit(mnist_model, train_loader)
+
+
+def test_predictcallback():
+    BATCH_SIZE = 10000
+    test_loader = DataLoader(test_ds, batch_size=BATCH_SIZE)
+    test_list = [t[0] for t in test_loader]
+
+    cb = PredictCallback()
+    trainer = Trainer(callbacks=[cb])
+    model = mnist_model.load_from_checkpoint('mnist.ckpt')
+    trainer.predict(model, test_list)
+
+
+def test_predictbatchcallback():
+    BATCH_SIZE = 10000
+    test_loader = DataLoader(test_ds, batch_size=BATCH_SIZE)
+    test_list = [t[0] for t in test_loader]
+
+    cb = PredictBatchCallback()
+    trainer = Trainer(callbacks=[cb])
+    model = mnist_model.load_from_checkpoint('mnist.ckpt')
+    trainer.predict(model, test_list)
+
+
+test_traincallback()
+test_trainbatchcallback()
+test_predictcallback()
+test_predictbatchcallback()
