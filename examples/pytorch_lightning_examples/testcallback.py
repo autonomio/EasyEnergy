@@ -38,7 +38,6 @@ test_ds = MNIST(PATH_DATASETS, train=False,
                 download=False,
                 transform=transforms.ToTensor())
 test_loader = DataLoader(test_ds, batch_size=BATCH_SIZE)
-test_list = [t[0] for t in test_loader]
 
 cb = TestCallback()
 trainer = Trainer(callbacks=[cb])
