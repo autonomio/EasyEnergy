@@ -33,6 +33,11 @@ class MNISTModel(LightningModule):
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=0.02)
 
+    def test_step(self, batch, batch_idx):
+        inputs, classes = batch
+        logits = self(inputs)
+        print(logits)
+
 
 # Init the model
 mnist_model = MNISTModel()
