@@ -90,13 +90,14 @@ def test_predictcallback():
 
 def test_predictbatchcallback():
     BATCH_SIZE = 10000
-    test_loader = DataLoader(test_ds, batch_size=BATCH_SIZE)
+    test_loader = DataLoader(test_ds)
     test_list = [t[0] for t in test_loader]
+    test_dl = DataLoader(test_list, batch_size=BATCH_SIZE)
 
     cb = PredictBatchCallback()
     trainer = Trainer(callbacks=[cb])
     model = mnist_model.load_from_checkpoint('mnist.ckpt')
-    trainer.predict(model, test_list)
+    trainer.predict(model, test_dl)
 
 
 test_traincallback()
