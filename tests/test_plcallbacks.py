@@ -10,6 +10,8 @@ from easyenergy.callbacks.pytorch_lightning import TrainCallback
 from easyenergy.callbacks.pytorch_lightning import TrainBatchCallback
 from easyenergy.callbacks.pytorch_lightning import PredictCallback
 from easyenergy.callbacks.pytorch_lightning import PredictBatchCallback
+from easyenergy.callbacks.pytorch_lightning import TestBatchCallback
+from easyenergy.callbacks.pytorch_lightning import TestCallback
 
 
 PATH_DATASETS = os.environ.get("PATH_DATASETS", ".")
@@ -100,7 +102,33 @@ def test_predictbatchcallback():
     trainer.predict(model, test_dl)
 
 
+def test_testcallback():
+    BATCH_SIZE = 256
+    cb = TestCallback()
+    trainer = Trainer(callbacks=[cb])
+    model = mnist_model.load_from_checkpoint('mnist.ckpt')
+    test_ds = MNIST(PATH_DATASETS, train=False,
+                    download=False,
+                    transform=transforms.ToTensor())
+    test_loader = DataLoader(test_ds, batch_size=BATCH_SIZE)
+    trainer.test(model, test_loader)
+
+
+def test_testbatchcallback():
+    BATCH_SIZE = 10000
+    cb = TestBatchCallback()
+    trainer = Trainer(callbacks=[cb])
+    model = mnist_model.load_from_checkpoint('mnist.ckpt')
+    test_ds = MNIST(PATH_DATASETS, train=False,
+                    download=False,
+                    transform=transforms.ToTensor())
+    test_loader = DataLoader(test_ds, batch_size=BATCH_SIZE)
+    trainer.test(model, test_loader)
+
+
 test_traincallback()
 test_trainbatchcallback()
 test_predictcallback()
 test_predictbatchcallback()
+test_testcallback()
+test_testbatchcallback()
