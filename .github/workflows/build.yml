@@ -41,3 +41,4 @@ jobs:
         pip install --upgrade pip
         python setup.py install
         pytest tests/test_kerascallbacks.py
+        pytest tests/test_plcallbacks.py
