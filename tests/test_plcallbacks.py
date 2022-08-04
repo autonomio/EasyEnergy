@@ -132,7 +132,7 @@ def test_testbatchcallback():
     trainer.test(model, test_loader)
 
 
-def test_perpeochcallback():
+def test_perepochcallback():
     BATCH_SIZE = 10000
     cb = PerEpochCallback()
     train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE)
@@ -151,4 +151,4 @@ test_predictcallback()
 test_predictbatchcallback()
 test_testcallback()
 test_testbatchcallback()
-test_perpeochcallback()
+test_perepochcallback()
