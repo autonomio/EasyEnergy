@@ -52,7 +52,7 @@ Usage:
 
 ```
 from easyenergy.callbacks.keras import TrainBatchCallback
-cb = TrainCallback()
+cb = TrainBatchCallback()
 history = model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size, callbacks=[cb])
 ```
 
