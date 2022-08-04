@@ -12,6 +12,7 @@ from easyenergy.callbacks.pytorch_lightning import PredictCallback
 from easyenergy.callbacks.pytorch_lightning import PredictBatchCallback
 from easyenergy.callbacks.pytorch_lightning import TestBatchCallback
 from easyenergy.callbacks.pytorch_lightning import TestCallback
+from easyenergy.callbacks.pytorch_lightning import PerEpochCallback
 
 
 PATH_DATASETS = os.environ.get("PATH_DATASETS", ".")
@@ -131,9 +132,23 @@ def test_testbatchcallback():
     trainer.test(model, test_loader)
 
 
+def test_perpeochcallback():
+    BATCH_SIZE = 10000
+    cb = PerEpochCallback()
+    train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE)
+    trainer = Trainer(
+        accelerator="auto",
+        devices=None,
+        max_epochs=2,
+        callbacks=[TQDMProgressBar(refresh_rate=20), cb],
+    )
+    trainer.fit(mnist_model, train_loader)
+
+
 test_traincallback()
 test_trainbatchcallback()
 test_predictcallback()
 test_predictbatchcallback()
 test_testcallback()
 test_testbatchcallback()
+test_perpeochcallback()
