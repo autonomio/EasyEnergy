@@ -1,6 +1,6 @@
-# Keras Callbacks
+# Pytorch Lightning Callbacks
 
-`kerascallbacks` allows you to do energy tracking on model training,testing or prediction involving `Keras` framework. 
+`pytorch_lightning` callbacks allows you to do energy tracking on model training,testing or prediction involving `pytorch_lightning` framework. 
 
 ## Training Callbacks.  
 Callbacks to track energy usage while model is training.  
@@ -17,9 +17,12 @@ output_dir | Optional, str | path to store output data in csv
 Usage:   
 
 ```
-from easyenergy.callbacks.keras import PerEpochCallback
+from easyenergy.callbacks.pytorch_lightning import PerEpochCallback
 cb = PerEpochCallback()
-history = model.fit(x_train, y_train, epochs=epochs, callbacks=[cb])
+trainer = Trainer(
+    epochs=epochs,
+    callbacks=[cb])
+trainer.fit(model, train_loader)
 ```
 
 ### 2) TrainCallback
@@ -34,9 +37,12 @@ output_dir | Optional, str | path to store output data in csv
 Usage:   
 
 ```
-from easyenergy.callbacks.keras import TrainCallback
+from easyenergy.callbacks.pytorch_lightning import TrainCallback
 cb = TrainCallback()
-history = model.fit(x_train, y_train, epochs=epochs, callbacks=[cb])
+trainer = Trainer(
+    epochs=epochs,
+    callbacks=[cb])
+trainer.fit(model, train_loader)
 ```
 
 ### 3) TrainBatchCallback
@@ -51,9 +57,12 @@ output_dir | Optional, str | path to store output data in csv
 Usage:   
 
 ```
-from easyenergy.callbacks.keras import TrainBatchCallback
+from easyenergy.callbacks.pytorch_lightning import TrainBatchCallback
 cb = TrainBatchCallback()
-history = model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size, callbacks=[cb])
+trainer = Trainer(
+    epochs=epochs,
+    callbacks=[cb])
+trainer.fit(model, train_loader)
 ```
 
 ## Test Callbacks
@@ -72,9 +81,11 @@ output_dir | Optional, str | path to store output data in csv
 Usage:   
 
 ```
-from easyenergy.callbacks.keras import TestCallback
+from easyenergy.callbacks.pytorch_lightning import TestCallback
 cb = TestCallback()
-test = model.evaluate(x_test, y_test, callbacks=[cb])
+trainer = Trainer(
+    callbacks=[cb])
+trainer.test(model, test_loader)
 ```
 ### 2) TestBatchCallback
 
@@ -88,10 +99,11 @@ output_dir | Optional, str | path to store output data in csv
 Usage:   
 
 ```
-from easyenergy.callbacks.keras import TestBatchCallback
+from easyenergy.callbacks.pytorch_lightning import TestBatchCallback
 cb = TestBatchCallback()
-test = model.evaluate(x_test, y_test, batch_size=batch_size,
-                      callbacks=[cb])
+trainer = Trainer(
+    callbacks=[cb])
+trainer.test(model, test_loader)
 ```
 
 ## Predict Callbacks
@@ -110,9 +122,11 @@ output_dir | Optional, str | path to store output data in csv
 Usage:   
 
 ```
-from easyenergy.callbacks.keras import PredictCallback
+from easyenergy.callbacks.pytorch_lightning import PredictCallback
 cb = PredictCallback()
-pred = model.predict(x_test, callbacks=[cb])
+trainer = Trainer(
+    callbacks=[cb])
+trainer.predict(model, test_loader)
 
 ```
 
@@ -128,9 +142,11 @@ output_dir | Optional, str | path to store output data in csv
 Usage:   
 
 ```
-from easyenergy.callbacks.keras import PredictBatchCallback
+from easyenergy.callbacks.pytorch_lightning import PredictBatchCallback
 cb = PredictBatchCallback()
-pred = model.predict(x_test, batch_size=batch_size, callbacks=[cb])
+trainer = Trainer(
+    callbacks=[cb])
+trainer.predict(model, test_loader)
 
 ```
 

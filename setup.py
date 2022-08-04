@@ -36,6 +36,7 @@ setuptools.setup(
     url=DOWNLOAD_URL,
     install_requires=install_requires,
     packages=setuptools.find_packages(),
+    extras_require={"pl": ["pytorch_lightning"]},
     python_requires='>=3.6',
     include_package_data=True
 )
