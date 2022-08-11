@@ -21,7 +21,7 @@ VERSION = '0.0.1'
 
 
 install_requires = ['tensorflow',
-                    'tensorboard==2.9',
+                    'tensorboard==2.9.1',
                     'pytorch_lightning',
                     'codecarbon']
 
