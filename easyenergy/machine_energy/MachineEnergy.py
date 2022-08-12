@@ -1,4 +1,5 @@
 import json
+from .tracker_run import tracker_run
 
 
 class MachineEnergy:
@@ -13,3 +14,5 @@ class MachineEnergy:
             self.config_data = config
             with open('config.json', 'w') as outfile:
                 json.dump(self.config_data, outfile, indent=2)
+
+        tracker_run(self)
