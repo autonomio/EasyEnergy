@@ -21,7 +21,7 @@ VERSION = '0.0.1'
 
 
 install_requires = ['tensorflow',
-                    'tensorboard==2.9.1',
+                    'tensorboard==2.8',
                     'pytorch_lightning',
                     'codecarbon']
 
@@ -38,7 +38,8 @@ setuptools.setup(
     url=DOWNLOAD_URL,
     install_requires=install_requires,
     packages=setuptools.find_packages(),
-    extras_require={"pl": ["pytorch_lightning"]},
+    extras_require={
+                    'machine_energy': 'paramiko'},
     python_requires='>=3.6',
     include_package_data=True
 )
