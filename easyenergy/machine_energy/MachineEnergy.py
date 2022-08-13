@@ -3,7 +3,8 @@ from .tracker_run import tracker_run
 
 
 class MachineEnergy:
-    def __init__(self, config):
+    def __init__(self, config, experiment_name='machine_energy'):
+        self.experiment_name = experiment_name
         # Handle the case when `config` is a filepath
         if isinstance(config, str):
             with open(config, 'r') as f:

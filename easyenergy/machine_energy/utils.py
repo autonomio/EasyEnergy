@@ -1,4 +1,5 @@
 import paramiko
+from inspect import getsource
 
 
 def ssh_connect(self):
@@ -30,3 +31,24 @@ def ssh_connect(self):
         clients[config['machine_id']] = client
 
     return clients
+
+
+def create_temp_file(self, train_func=None,
+                     framework='keras'):
+    experiment_name = self.experiment_name
+    if not train_func:
+
+        if framework == 'keras':
+            from .models import mnist_keras
+            filestr = getsource(mnist_keras)
+
+            with open("/tmp/{}/mnist_keras.py".format(
+                    experiment_name), "w") as f:
+                f.write(filestr)
+
+        elif framework == 'pl':
+            from .models import mnist_pl
+            filestr = getsource(mnist_pl)
+            with open("/tmp/{}/mnist_pl.py".format(
+                    experiment_name), "w") as f:
+                f.write(filestr)
