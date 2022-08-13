@@ -39,6 +39,7 @@ jobs:
     - name: Test with pytest
       run: |
         pip install --upgrade pip
+        pip install --upgrade tensorflow
         pip install -r requirements.txt
         python setup.py install
         pytest tests/test_kerascallbacks.py
