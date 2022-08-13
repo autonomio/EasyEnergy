@@ -1,5 +1,6 @@
 import paramiko
 from inspect import getsource
+import os
 
 
 def ssh_connect(self):
@@ -36,19 +37,47 @@ def ssh_connect(self):
 def create_temp_file(self, train_func=None,
                      framework='keras'):
     experiment_name = self.experiment_name
-    if not train_func:
 
+    if not train_func:
+        # if custom train function is not added.
         if framework == 'keras':
             from .models import mnist_keras
             filestr = getsource(mnist_keras)
 
-            with open("/tmp/{}/mnist_keras.py".format(
+            with open("/tmp/{}/easyenergy_mnist_keras.py".format(
                     experiment_name), "w") as f:
                 f.write(filestr)
 
         elif framework == 'pl':
             from .models import mnist_pl
             filestr = getsource(mnist_pl)
-            with open("/tmp/{}/mnist_pl.py".format(
+            with open("/tmp/{}/easyenergy_mnist_pl.py".format(
                     experiment_name), "w") as f:
                 f.write(filestr)
+
+
+def ssh_file_transfer(self, client, machine_id):
+    '''Transfer the current talos script to the remote machines'''
+
+    sftp = client.open_sftp()
+
+    try:
+        sftp.chdir(self.dest_dir)  # Test if dest dir exists
+
+    except IOError:
+        sftp.mkdir(self.dest_dir)  # Create dest dir
+        sftp.chdir(self.dest_dir)
+
+    create_temp_file(self)
+    files = ['easyenergy_mnist_keras.py',
+             'easyenergy_mnist_pl.py']
+
+    for file in sftp.listdir('/tmp/{}'.format(
+            self.experiment_name)):
+        if file.startswith('easyenergy'):
+            sftp.remove('/tmp/{}/'.format(self.experiment_name) + file)
+
+    for file in os.listdir('/tmp/{}'.format(self.experiment_name)):
+        if file in files:
+            sftp.put('/tmp/{}/'.format(self.experiment_name) + file, file)
+    sftp.close()
