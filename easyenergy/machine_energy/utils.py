@@ -108,12 +108,18 @@ def ssh_run(self, client, machine_id):
 
     '''
     if not self.train_func:
+
         if self.framework == 'keras':
             execute_str = 'python3 /tmp/{}/easyenergy_mnist_keras.py'.format(
                 self.experiment_name)
         elif self.framework == 'pl':
             execute_str = 'python3 /tmp/{}/easyenergy_mnist_pl.py'.format(
                 self.experiment_name)
+
+    else:
+        execute_str = 'python3 /tmp/{}/easyenergy_custom_model.py'.format(
+            self.experiment_name)
+
     stdin, stdout, stderr = client.exec_command(execute_str)
 
     if stderr:
