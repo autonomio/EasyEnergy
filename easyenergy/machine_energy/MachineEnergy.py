@@ -9,7 +9,7 @@ class MachineEnergy:
         self.experiment_name = experiment_name
         self.dest_dir = '/tmp/{}/'.format(experiment_name)
         self.framework = framework
-        self.train_func = train_func()
+        self.train_func = train_func
         # Handle the case when `config` is a filepath
         if isinstance(config, str):
             with open(config, 'r') as f:
