@@ -1,4 +1,4 @@
-def mnist_pl(self):
+def mnist_pl():
     import os
     import torch
     from pytorch_lightning import LightningModule, Trainer
@@ -49,10 +49,10 @@ def mnist_pl(self):
 
     # Train the model ⚡
     trainer.fit(mnist_model, train_loader)
-    return self
+    return trainer
 
 
-def mnist_keras(self):
+def mnist_keras():
     from easyenergy.callbacks.keras import TrainCallback
     import tensorflow as tf
 
@@ -75,5 +75,5 @@ def mnist_keras(self):
     model.compile(optimizer="adam", loss=loss_fn, metrics=["accuracy"])
 
     cb = TrainCallback()
-    model.fit(x_train, y_train, epochs=3, callbacks=[cb])
-    return self
+    history = model.fit(x_train, y_train, epochs=3, callbacks=[cb])
+    return history
