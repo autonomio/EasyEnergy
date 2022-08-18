@@ -45,6 +45,8 @@ def create_temp_file(self):
         if framework == 'keras':
             from .models import mnist_keras
             filestr = getsource(mnist_keras)
+            run_command = 'mnist_keras()'
+            filestr = filestr + '\n' + run_command
 
             with open("/tmp/{}/easyenergy_mnist_keras.py".format(
                     experiment_name), "w") as f:
@@ -53,11 +55,16 @@ def create_temp_file(self):
         elif framework == 'pl':
             from .models import mnist_pl
             filestr = getsource(mnist_pl)
+            run_command = 'mnist_pl()'
+            filestr = filestr + '\n' + run_command
             with open("/tmp/{}/easyenergy_mnist_pl.py".format(
                     experiment_name), "w") as f:
                 f.write(filestr)
     else:
         filestr = getsource(train_func)
+        func_name = train_func.__name__
+        run_command = func_name + '()'
+        filestr = filestr + '\n' + run_command
         with open("/tmp/{}/easyenergy_custom_model.py".format(
                 experiment_name), "w") as f:
             f.write(filestr)
