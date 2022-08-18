@@ -1,4 +1,5 @@
 import json
+import os
 from .tracker_run import tracker_run
 
 
@@ -8,6 +9,10 @@ class MachineEnergy:
                  train_func=None):
         self.experiment_name = experiment_name
         self.dest_dir = '/tmp/{}/'.format(experiment_name)
+
+        if not os.path.exists(self.dest_dir):
+            os.mkdir(self.dest_dir)
+
         self.framework = framework
         self.train_func = train_func
         # Handle the case when `config` is a filepath
