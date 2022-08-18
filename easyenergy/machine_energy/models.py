@@ -1,3 +1,6 @@
+from ..callbacks.pytorch_lightning import TrainCallback
+
+
 def mnist_pl():
     import os
     import torch
@@ -7,7 +10,6 @@ def mnist_pl():
     from torch.utils.data import DataLoader
     from torchvision import transforms
     from torchvision.datasets import MNIST
-    from easyenergy.callbacks.pytorch_lightning import TrainCallback
 
     PATH_DATASETS = os.environ.get("PATH_DATASETS", ".")
     BATCH_SIZE = 256 if torch.cuda.is_available() else 64
@@ -52,8 +54,11 @@ def mnist_pl():
     return trainer
 
 
+from ..callbacks.keras import TrainCallback
+
+
 def mnist_keras():
-    from easyenergy.callbacks.keras import TrainCallback
+
     import tensorflow as tf
 
     mnist = tf.keras.datasets.mnist
