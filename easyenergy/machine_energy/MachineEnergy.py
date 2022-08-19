@@ -23,7 +23,8 @@ class MachineEnergy:
         # Handle the case when `config` is dict
         elif isinstance(config, dict):
             self.config_data = config
-            with open('config.json', 'w') as outfile:
+            with open('tmp/{}/easyenergy_config.json'.format(experiment_name),
+                      'w') as outfile:
                 json.dump(self.config_data, outfile, indent=2)
 
         tracker_run(self)
