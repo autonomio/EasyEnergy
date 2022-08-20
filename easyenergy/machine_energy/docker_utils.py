@@ -135,3 +135,50 @@ def docker_image_setup(self, client, machine_id, db_machine=False):
                 print(line)
             except Exception as e:
                 print(e)
+
+
+def docker_machine_run(self, client, machine_id):
+    ''' Run EasyEnergy using docker'''
+    machine_id = str(machine_id)
+    experiment_name = self.experiment_name
+    print('started experiment in machine id {}'.format(machine_id))
+    rm_container = ['sudo docker stop easyenergy_docker_remote',
+                    'sudo docker rm easyenergy_docker_remote']
+    build = ['sudo docker build -t easyenergy_docker_remote -f /tmp/' +
+             experiment_name + '/Dockerfile /tmp/' + experiment_name + '/']
+    execute_strings = [
+
+        'sudo docker run  --name {} {}'.format(
+            'easyenergy_docker_remote', 'easyenergy_docker_remote'),
+
+        'sudo docker container cp -a easyenergy_docker_remote:/tmp/ /tmp/' +
+        experiment_name + '/',
+
+        'sudo docker stop easyenergy_docker_remote',
+        'sudo docker rm easyenergy_docker_remote']
+
+    cmd_strings = rm_container + build + execute_strings
+    execute_strings = []
+
+    for string in cmd_strings:
+        string = string.replace('easyenergy_docker_remote', experiment_name)
+        execute_strings.append(string)
+
+    for execute_str in execute_strings:
+        stdin, stdout, stderr = client.exec_command(execute_str)
+        if stderr:
+            for line in stderr:
+                try:
+                    # Process each error line in the remote output
+                    print(line)
+                except Exception as e:
+                    print(e)
+
+        for line in stdout:
+            try:
+                # Process each line in the remote output
+                print(line)
+            except Exception as e:
+                print(e)
+
+    print('Completed experiment in machine id {}'.format(machine_id))
