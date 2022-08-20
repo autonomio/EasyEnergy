@@ -82,3 +82,56 @@ def docker_ssh_file_transfer(self, client):
                 experiment_name) + file, dest_dir + file)
 
     sftp.close()
+
+
+def docker_image_setup(self, client, machine_id, db_machine=False):
+    '''Run the transmitted script remotely without args and show its output.
+
+    Parameters
+    ----------
+    client | `Object` | paramiko ssh client object
+    machine_id | `int`| Machine id for each of the distribution machines
+
+    Returns
+    -------
+    None.
+
+    '''
+    execute_str = 'sudo docker'
+    execute_strings = []
+    stdin, stdout, stderr = client.exec_command(execute_str)
+    dockerflag = True
+
+    if stdout:
+        if 'command not found' in stdout:
+            dockerflag = False
+    if stderr:
+        if 'command not found' in stdout:
+            dockerflag = False
+
+    if not dockerflag:
+        install = ['chmod +x /tmp/{}/easyenergy_docker.sh'.format(
+            self.experiment_name),
+            '/tmp/{}/easyenergy_docker.sh'.format(
+                self.experiment_name)]
+        execute_strings += install
+
+    pull = ['sudo docker pull abhijithneilabraham/easyenergy_docker_image']
+    execute_strings += pull
+
+    for execute_str in execute_strings:
+        stdin, stdout, stderr = client.exec_command(execute_str)
+        if stderr:
+            for line in stderr:
+                try:
+                    # Process each error line in the remote output
+                    print(line)
+                except Exception as e:
+                    print(e)
+
+        for line in stdout:
+            try:
+                # Process each line in the remote output
+                print(line)
+            except Exception as e:
+                print(e)
