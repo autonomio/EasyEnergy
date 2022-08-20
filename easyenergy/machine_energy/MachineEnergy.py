@@ -17,8 +17,13 @@ class MachineEnergy:
         self.train_func = train_func
         # Handle the case when `config` is a filepath
         if isinstance(config, str):
+
             with open(config, 'r') as f:
                 self.config_data = json.load(f)
+
+            with open('tmp/{}/easyenergy_config.json'.format(experiment_name),
+                      'w') as outfile:
+                json.dump(self.config_data, outfile, indent=2)
 
         # Handle the case when `config` is dict
         elif isinstance(config, dict):
