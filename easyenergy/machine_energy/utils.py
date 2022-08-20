@@ -43,7 +43,7 @@ def create_temp_file(self):
     if not train_func:
         # if custom train function is not added.
         if framework == 'keras':
-            from .models import mnist_keras
+            from .models.easyenergy_mnist_keras import mnist_keras
             filestr = getsource(mnist_keras)
             run_command = 'mnist_keras()'
             filestr = filestr + '\n' + run_command
@@ -53,7 +53,7 @@ def create_temp_file(self):
                 f.write(filestr)
 
         elif framework == 'pl':
-            from .models import mnist_pl
+            from .models.easyenergy_mnist_pl import mnist_pl
             filestr = getsource(mnist_pl)
             run_command = 'mnist_pl()'
             filestr = filestr + '\n' + run_command
