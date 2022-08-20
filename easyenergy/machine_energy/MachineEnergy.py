@@ -6,7 +6,8 @@ from .tracker_run import tracker_run
 class MachineEnergy:
     def __init__(self, config, experiment_name='machine_energy',
                  framework='keras',
-                 train_func=None):
+                 train_func=None,
+                 docker=False):
         self.experiment_name = experiment_name
         self.dest_dir = '/tmp/{}/'.format(experiment_name)
 
@@ -32,4 +33,4 @@ class MachineEnergy:
                       'w') as outfile:
                 json.dump(self.config_data, outfile, indent=2)
 
-        tracker_run(self)
+        tracker_run(self, docker=docker)
