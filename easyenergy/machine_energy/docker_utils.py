@@ -158,7 +158,8 @@ def docker_machine_run(self, client, machine_id):
         'sudo docker run  --name {} {}'.format(
             'easyenergy_docker_remote', 'easyenergy_docker_remote'),
 
-        'sudo docker container cp -a easyenergy_docker_remote:/tmp/ /tmp/' +
+        'sudo docker container cp -a {}:/tmp/{}/ /tmp/'.format(
+            'easyenergy_docker_remote', experiment_name) +
         experiment_name + '/',
 
         'sudo docker stop easyenergy_docker_remote',
