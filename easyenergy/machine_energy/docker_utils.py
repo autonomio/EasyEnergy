@@ -45,7 +45,6 @@ def write_dockerfile(self):
 
                 'CMD python3 /tmp/{}'.format(filename),
 
-                'RUN chmod -R 777 /tmp/'
                 ]
 
     with open('/tmp/{}/Dockerfile'.format(
