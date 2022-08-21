@@ -38,8 +38,6 @@ def write_dockerfile(self):
 
     commands = ['FROM abhijithneilabraham/easyenergy_docker_image',
 
-                'RUN mkdir -p /tmp/',
-
                 'COPY {} /tmp/{}'.format(filename, filename),
 
 
@@ -84,7 +82,7 @@ def docker_ssh_file_transfer(self, client):
     sftp.close()
 
 
-def docker_image_setup(self, client, machine_id, db_machine=False):
+def docker_image_setup(self, client, machine_id):
     '''Run the transmitted script remotely without args and show its output.
 
     Parameters
@@ -97,23 +95,33 @@ def docker_image_setup(self, client, machine_id, db_machine=False):
     None.
 
     '''
+
     execute_str = 'sudo docker'
     execute_strings = []
     stdin, stdout, stderr = client.exec_command(execute_str)
+    stdout = str(stdout.read())
+    stderr = str(stderr.read())
+
     dockerflag = True
 
     if stdout:
         if 'command not found' in stdout:
             dockerflag = False
     if stderr:
-        if 'command not found' in stdout:
+        if 'command not found' in stderr:
             dockerflag = False
 
     if not dockerflag:
-        install = ['chmod +x /tmp/{}/easyenergy_docker.sh'.format(
-            self.experiment_name),
-            '/tmp/{}/easyenergy_docker.sh'.format(
-                self.experiment_name)]
+        # if yum:
+        # install = ['chmod +x /tmp/{}/easyenergy_docker.sh'.format(
+        #     self.experiment_name),
+        #     'sh /tmp/{}/easyenergy_docker.sh'.format(
+        #         self.experiment_name)]
+        # else:
+        install = ['sudo yum update -y',
+                   'sudo amazon-linux-extras install docker -y',
+                   'sudo service docker start']
+
         execute_strings += install
 
     pull = ['sudo docker pull abhijithneilabraham/easyenergy_docker_image']

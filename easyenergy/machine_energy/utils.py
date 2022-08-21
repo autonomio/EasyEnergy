@@ -86,7 +86,8 @@ def ssh_file_transfer(self, client, machine_id):
 
     if not self.train_func:
         files = ['easyenergy_mnist_keras.py',
-                 'easyenergy_mnist_pl.py']
+                 'easyenergy_mnist_pl.py',
+                 'easyenergy_config.json']
     else:
         files = ['easyenergy_custom_model.py']
 
