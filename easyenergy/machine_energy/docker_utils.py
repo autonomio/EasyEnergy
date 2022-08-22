@@ -112,15 +112,11 @@ def docker_image_setup(self, client, machine_id):
             dockerflag = False
 
     if not dockerflag:
-        # if yum:
-        # install = ['chmod +x /tmp/{}/easyenergy_docker.sh'.format(
-        #     self.experiment_name),
-        #     'sh /tmp/{}/easyenergy_docker.sh'.format(
-        #         self.experiment_name)]
-        # else:
-        install = ['sudo yum update -y',
-                   'sudo amazon-linux-extras install docker -y',
-                   'sudo service docker start']
+
+        install = ['chmod +x /tmp/{}/easyenergy_docker.sh'.format(
+            self.experiment_name),
+            'sh /tmp/{}/easyenergy_docker.sh'.format(
+                self.experiment_name)]
 
         execute_strings += install
 
