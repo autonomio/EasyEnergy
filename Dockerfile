@@ -4,9 +4,7 @@
 
 FROM ubuntu:20.04
 
-RUN apt-get update && apt-get install -y python3.9 python3.9-dev
-
-RUN apt install -y python3-pip
+FROM python:3.9
 
 WORKDIR /app
 

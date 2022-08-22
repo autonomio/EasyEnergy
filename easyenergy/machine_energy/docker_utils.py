@@ -23,7 +23,7 @@ def write_shell_script(self):
             f.write(command + '\n')
 
 
-def write_dockerfile(self):
+def write_dockerfile(self, platform='amd'):
     framework = self.framework
     experiment_name = self.experiment_name
 
@@ -36,9 +36,16 @@ def write_dockerfile(self):
     else:
         filename = 'easyenergy_custom_model.py'
 
+    if platform == 'amd':
+        image_name = 'abhijithneilabraham/easyenergy_docker_image_amd64'
+    else:
+        image_name = 'abhijithneilabraham/easyenergy_docker_image'
+
+    self.image_name = image_name
+
     commands = ['FROM ubuntu:20.04',
 
-                'FROM abhijithneilabraham/easyenergy_docker_image',
+                'FROM {}'.format(image_name),
 
                 'COPY {} /tmp/{}'.format(filename, filename),
 
@@ -120,7 +127,10 @@ def docker_image_setup(self, client, machine_id):
 
         execute_strings += install
 
-    pull = ['sudo docker pull abhijithneilabraham/easyenergy_docker_image']
+    image_name = self.image_name
+    pullstr = 'sudo docker pull {}'.format(image_name)
+
+    pull = [pullstr]
     execute_strings += pull
 
     for execute_str in execute_strings:

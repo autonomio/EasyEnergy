@@ -7,7 +7,8 @@ class MachineEnergy:
     def __init__(self, config, experiment_name='machine_energy',
                  framework='keras',
                  train_func=None,
-                 docker=False):
+                 docker=False,
+                 ):
         self.experiment_name = experiment_name
         self.dest_dir = '/tmp/{}/'.format(experiment_name)
 
