@@ -1,6 +1,7 @@
 import paramiko
 from inspect import getsource
 import os
+import shutil
 
 
 def ssh_connect(self):
@@ -39,27 +40,20 @@ def create_temp_file(self):
     experiment_name = self.experiment_name
     train_func = self.train_func
     framework = self.framework
+    currpath = os.path.dirname(__file__)
+    modelpath = currpath + '/models/'
 
     if not train_func:
         # if custom train function is not added.
         if framework == 'keras':
-            from .models.easyenergy_mnist_keras import mnist_keras
-            filestr = getsource(mnist_keras)
-            run_command = 'mnist_keras()'
-            filestr = filestr + '\n' + run_command
-
-            with open("/tmp/{}/easyenergy_mnist_keras.py".format(
-                    experiment_name), "w") as f:
-                f.write(filestr)
+            shutil.copyfile(modelpath + 'easyenergy_mnist_keras.py',
+                            '/tmp/{}/easyenergy_mnist_keras.py'.format(
+                                experiment_name))
 
         elif framework == 'pl':
-            from .models.easyenergy_mnist_pl import mnist_pl
-            filestr = getsource(mnist_pl)
-            run_command = 'mnist_pl()'
-            filestr = filestr + '\n' + run_command
-            with open("/tmp/{}/easyenergy_mnist_pl.py".format(
-                    experiment_name), "w") as f:
-                f.write(filestr)
+            shutil.copyfile(modelpath + 'easyenergy_mnist_pl.py',
+                            '/tmp/{}/easyenergy_mnist_pl.py'.format(
+                                experiment_name))
     else:
         filestr = getsource(train_func)
         func_name = train_func.__name__

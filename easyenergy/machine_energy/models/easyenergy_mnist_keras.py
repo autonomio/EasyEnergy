@@ -1,4 +1,4 @@
-from ...callbacks.keras import TrainCallback
+from easyenergy.callbacks.keras import TrainCallback
 
 
 def mnist_keras():
@@ -26,3 +26,6 @@ def mnist_keras():
     cb = TrainCallback()
     history = model.fit(x_train, y_train, epochs=3, callbacks=[cb])
     return history
+
+
+mnist_keras()

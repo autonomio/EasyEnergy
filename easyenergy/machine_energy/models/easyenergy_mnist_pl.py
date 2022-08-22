@@ -1,4 +1,4 @@
-from ...callbacks.pytorch_lightning import TrainCallback
+from easyenergy.callbacks.pytorch_lightning import TrainCallback
 
 
 def mnist_pl():
@@ -52,3 +52,6 @@ def mnist_pl():
     # Train the model ⚡
     trainer.fit(mnist_model, train_loader)
     return trainer
+
+
+mnist_pl()
