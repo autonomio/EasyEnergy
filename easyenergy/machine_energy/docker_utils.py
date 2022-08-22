@@ -51,7 +51,7 @@ def write_dockerfile(self, platform='amd'):
 
                 'COPY easyenergy_config.json /tmp/easyenergy_config.json',
 
-                'CMD python3 /tmp/{}'.format(filename),
+                'CMD python3.9 /tmp/{}'.format(filename),
 
                 ]
 
