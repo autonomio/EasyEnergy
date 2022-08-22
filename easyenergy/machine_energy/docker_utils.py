@@ -36,10 +36,11 @@ def write_dockerfile(self):
     else:
         filename = 'easyenergy_custom_model.py'
 
-    commands = ['FROM abhijithneilabraham/easyenergy_docker_image',
+    commands = ['FROM ubuntu:20.04',
+
+                'FROM abhijithneilabraham/easyenergy_docker_image',
 
                 'COPY {} /tmp/{}'.format(filename, filename),
-
 
                 'COPY easyenergy_config.json /tmp/easyenergy_config.json',
 
