@@ -50,9 +50,9 @@ def write_dockerfile(self, platform='amd'):
 
                 'RUN mkdir /tmp/{}/'.format(experiment_name),
 
-                'COPY {} /tmp/{}/{}/'.format(filename,
-                                             experiment_name,
-                                             filename),
+                'COPY {} /tmp/{}/{}'.format(filename,
+                                            experiment_name,
+                                            filename),
 
                 'COPY {} /tmp/{}/{}'.format(config_name,
                                             experiment_name,
@@ -183,7 +183,8 @@ def docker_machine_run(self, client, machine_id):
     execute_strings = []
 
     for string in cmd_strings:
-        string = string.replace('easyenergy_docker_remote', experiment_name)
+        string = string.replace('easyenergy_docker_remote',
+                                'easyenergy_docker_remote_' + experiment_name)
         execute_strings.append(string)
 
     for execute_str in execute_strings:
