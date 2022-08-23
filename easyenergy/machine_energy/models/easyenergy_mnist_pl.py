@@ -54,4 +54,5 @@ def mnist_pl():
     return trainer
 
 
-mnist_pl()
+if __name__ == "__main__":
+    mnist_pl()

@@ -48,7 +48,7 @@ def write_dockerfile(self, platform='amd'):
 
                 'FROM {}'.format(image_name),
 
-                'RUN mkdir /tmp/{}'.format(experiment_name),
+                'RUN mkdir /tmp/{}/'.format(experiment_name),
 
                 'COPY {} /tmp/{}/{}/'.format(filename,
                                              experiment_name,

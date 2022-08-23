@@ -28,4 +28,5 @@ def mnist_keras():
     return history
 
 
-mnist_keras()
+if __name__ == "__main__":
+    mnist_keras()
