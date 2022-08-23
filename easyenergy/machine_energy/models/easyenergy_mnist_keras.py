@@ -22,8 +22,8 @@ def mnist_keras():
     loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
     model.compile(optimizer="adam", loss=loss_fn, metrics=["accuracy"])
-
-    cb = TrainCallback()
+    res_path = '/tmp/energy_results'
+    cb = TrainCallback(res_path)
     history = model.fit(x_train, y_train, epochs=3, callbacks=[cb])
     return history
 

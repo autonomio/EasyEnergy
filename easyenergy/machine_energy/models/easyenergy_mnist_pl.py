@@ -33,7 +33,8 @@ def mnist_pl():
     # Init the model
     mnist_model = MNISTModel()
     # Use the easyenergy Callback for tracking energy during training
-    cb = TrainCallback()
+    res_path = '/tmp/energy_results'
+    cb = TrainCallback(res_path)
 
     # Init DataLoader from MNIST Dataset
     train_ds = MNIST(PATH_DATASETS, train=True,
