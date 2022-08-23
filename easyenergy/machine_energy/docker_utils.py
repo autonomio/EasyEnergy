@@ -42,16 +42,24 @@ def write_dockerfile(self, platform='amd'):
         image_name = 'abhijithneilabraham/easyenergy_docker_image'
 
     self.image_name = image_name
+    config_name = 'easyenergy_config.json'
 
     commands = ['FROM ubuntu:20.04',
 
                 'FROM {}'.format(image_name),
 
-                'COPY {} /tmp/{}'.format(filename, filename),
+                'RUN mkdir /tmp/{}'.format(experiment_name),
 
-                'COPY easyenergy_config.json /tmp/easyenergy_config.json',
+                'COPY {} /tmp/{}/{}/'.format(filename,
+                                             experiment_name,
+                                             filename),
 
-                'CMD python3.9 /tmp/{}'.format(filename),
+                'COPY {} /tmp/{}/{}'.format(config_name,
+                                            experiment_name,
+                                            config_name),
+
+                'CMD python3.9 /tmp/{}/{}'.format(experiment_name,
+                                                  filename),
 
                 ]
 
@@ -165,10 +173,9 @@ def docker_machine_run(self, client, machine_id):
         'sudo docker run  --name {} {}'.format(
             'easyenergy_docker_remote', 'easyenergy_docker_remote'),
 
-        'sudo docker container cp -a {}:/tmp/{}/ /tmp/'.format(
-            'easyenergy_docker_remote', experiment_name) +
-        experiment_name + '/',
-
+        'sudo docker container cp -a {}:/tmp/{}/ /tmp/{}/'.format(
+            'easyenergy_docker_remote', experiment_name,
+            experiment_name),
         'sudo docker stop easyenergy_docker_remote',
         'sudo docker rm easyenergy_docker_remote']
 
