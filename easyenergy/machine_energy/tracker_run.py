@@ -1,4 +1,5 @@
 from .utils import ssh_connect, ssh_file_transfer, ssh_run
+from .utils import ssh_get_files
 
 from .docker_utils import write_shell_script, write_dockerfile
 from .docker_utils import docker_ssh_file_transfer, docker_image_setup
@@ -31,6 +32,8 @@ def tracker_run(self, docker=False):
             thread = threading.Thread(target=docker_machine_run, args=args)
             thread.start()
             threads.append(thread)
+
+        ssh_get_files(self, client, machine_id)
 
     for t in threads:
         t.join()
