@@ -2,6 +2,7 @@ import paramiko
 from inspect import getsource
 import os
 import shutil
+import pandas as pd
 
 
 def ssh_connect(self):
@@ -138,3 +139,19 @@ def ssh_run(self, client, machine_id):
             print(line)
         except Exception as e:
             print(e)
+
+
+def ssh_get_files(self, client, machine_id):
+    '''Get files via ssh from a machine'''
+    experiment_name = self.experiment_name
+    sftp = client.open_sftp()
+    data_dir = '/tmp/{}/energy_results'.format(experiment_name)
+    sftp.chdir(data_dir)
+
+    for file in sftp.listdir(data_dir):
+        if file.endswith('.csv'):
+            sftp.get(data_dir + file, '/tmp/{}/{}/'.format(
+                self.experiment_name, 'machine_energy_results') + file)
+
+    sftp.close()
+
