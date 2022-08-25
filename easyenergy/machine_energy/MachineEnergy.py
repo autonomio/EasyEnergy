@@ -15,6 +15,9 @@ class MachineEnergy:
         if not os.path.exists(self.dest_dir):
             os.mkdir(self.dest_dir)
 
+        if not os.path.exists(self.dest_dir + '/machine_energy_results'):
+            os.mkdir(self.dest_dir+'/machine_energy_results')
+
         self.framework = framework
         self.train_func = train_func
         # Handle the case when `config` is a filepath
