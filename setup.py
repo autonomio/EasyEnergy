@@ -22,7 +22,8 @@ VERSION = '0.0.1'
 
 install_requires = ['tensorflow',
                     'pytorch_lightning',
-                    'codecarbon']
+                    'codecarbon',
+                    'paramiko']
 
 
 setuptools.setup(
@@ -37,8 +38,6 @@ setuptools.setup(
     url=DOWNLOAD_URL,
     install_requires=install_requires,
     packages=setuptools.find_packages(),
-    extras_require={
-                    'machine_energy': 'paramiko'},
     python_requires='>=3.6',
     include_package_data=True
 )
