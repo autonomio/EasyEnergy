@@ -155,3 +155,17 @@ def ssh_get_files(self, client, machine_id):
 
     sftp.close()
 
+
+def fetch_latest_csv(self):
+    experiment_name = self.experiment_name
+    data_folder = 'tmp/{}/{}/'.format(experiment_name,
+                                      'machine_energy_results')
+    files = [data_folder + file
+             for file in os.listdir(data_folder) if file.endswith('.csv')]
+
+    sorted_files = sorted(files,
+                          key=os.path.getmtime)
+    latest_file = sorted_files[-1]
+
+    data = pd.read_csv(latest_file)
+    return data
