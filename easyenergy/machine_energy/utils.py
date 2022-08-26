@@ -146,9 +146,10 @@ def ssh_get_files(self, client, machine_id):
     experiment_name = self.experiment_name
     sftp = client.open_sftp()
     data_dir = '/tmp/{}/energy_results'.format(experiment_name)
+    local_dir = '/tmp/{}/machine_energy_results'.format(experiment_name)
     sftp.chdir(data_dir)
 
-    for f in os.listdir(data_dir):
+    for f in os.listdir(local_dir):
         if f.endswith('.csv'):
             os.remove(os.path.join(data_dir, f))
 
