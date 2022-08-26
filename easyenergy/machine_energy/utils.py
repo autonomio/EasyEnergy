@@ -151,7 +151,9 @@ def ssh_get_files(self, client, machine_id):
     for file in sftp.listdir(data_dir):
         if file.endswith('.csv'):
             sftp.get(data_dir + file, '/tmp/{}/{}/'.format(
-                self.experiment_name, 'machine_energy_results') + file)
+                self.experiment_name,
+                'machine_energy_results') + 'machine_' +
+                str(machine_id) + ' ' + file)
 
     sftp.close()
 
