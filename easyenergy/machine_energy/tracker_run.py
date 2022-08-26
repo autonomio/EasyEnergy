@@ -1,5 +1,5 @@
 from .utils import ssh_connect, ssh_file_transfer, ssh_run
-from .utils import ssh_get_files
+from .utils import ssh_get_files, compare_results
 
 from .docker_utils import write_shell_script, write_dockerfile
 from .docker_utils import docker_ssh_file_transfer, docker_image_setup
@@ -37,3 +37,5 @@ def tracker_run(self, docker=False):
 
     for t in threads:
         t.join()
+
+    compare_results(self)

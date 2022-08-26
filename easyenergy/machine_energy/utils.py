@@ -3,6 +3,7 @@ from inspect import getsource
 import os
 import shutil
 import pandas as pd
+import time
 
 
 def ssh_connect(self):
@@ -147,6 +148,7 @@ def ssh_get_files(self, client, machine_id):
     sftp = client.open_sftp()
     data_dir = '/tmp/{}/energy_results'.format(experiment_name)
     local_dir = '/tmp/{}/machine_energy_results'.format(experiment_name)
+    self.local_dir = local_dir
     sftp.chdir(data_dir)
 
     for f in os.listdir(local_dir):
@@ -158,21 +160,34 @@ def ssh_get_files(self, client, machine_id):
             sftp.get(data_dir + file, '/tmp/{}/{}/'.format(
                 self.experiment_name,
                 'machine_energy_results') + 'machine_' +
-                str(machine_id) + ' ' + file)
+                str(machine_id) + '_' + file)
 
     sftp.close()
 
 
-def fetch_latest_csv(self):
-    experiment_name = self.experiment_name
-    data_folder = 'tmp/{}/{}/'.format(experiment_name,
-                                      'machine_energy_results')
-    files = [data_folder + file
-             for file in os.listdir(data_folder) if file.endswith('.csv')]
+def compare_results(self):
+    local_dir = self.local_dir
+    emissions = []
+    energy_consumption = []
+    machine_ids = []
+    for f in os.listdir(local_dir):
+        if f.endswith('.csv'):
+            data = pd.read_csv(local_dir + '/' + f)
+            machine_id = int(f.split('_')[1])
+            emissions.append(data['emissions'])
+            energy_consumption.append(data['energy_consumed'])
+            machine_ids.append(machine_id)
+    res = pd.DataFrame({'machine_id': machine_ids,
+                        'emissions': emissions,
+                        'energy_consumption': energy_consumption})
+    save_folder = 'machine_energy_comparison'
 
-    sorted_files = sorted(files,
-                          key=os.path.getmtime)
-    latest_file = sorted_files[-1]
+    if not os.path.exists(save_folder):
+        os.mkdir(save_folder)
 
-    data = pd.read_csv(latest_file)
-    return data
+    filename = time.strftime('%D%H%M%S').replace('/', '')
+    filename = filename + '/results.csv'
+
+    res.to_csv(save_folder + '/' + filename)
+
+    return res
