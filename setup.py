@@ -25,6 +25,10 @@ install_requires = ['tensorflow',
                     'codecarbon',
                     'paramiko']
 
+extras = {'callbacks':  ['tensorflow',
+                         'pytorch_lightning',
+                         'codecarbon']}
+
 
 setuptools.setup(
     name=DISTNAME,
@@ -37,6 +41,7 @@ setuptools.setup(
     license=LICENSE,
     url=DOWNLOAD_URL,
     install_requires=install_requires,
+    extras_requires=extras,
     packages=setuptools.find_packages(),
     python_requires='>=3.6',
     include_package_data=True
