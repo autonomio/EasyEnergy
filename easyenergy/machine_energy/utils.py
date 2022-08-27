@@ -146,14 +146,23 @@ def ssh_get_files(self, client, machine_id):
     '''Get files via ssh from a machine'''
     experiment_name = self.experiment_name
     sftp = client.open_sftp()
-    data_dir = '/tmp/{}/energy_results'.format(experiment_name)
+    data_dir = '/tmp/{}/energy_results/'.format(experiment_name)
     local_dir = '/tmp/{}/machine_energy_results'.format(experiment_name)
     self.local_dir = local_dir
-    sftp.chdir(data_dir)
+
+    try:
+        sftp.chdir(data_dir)  # Test if dest dir exists
+
+    except IOError:
+        sftp.mkdir(data_dir)  # Create dest dir
+        sftp.chdir(data_dir)
 
     for f in os.listdir(local_dir):
         if f.endswith('.csv'):
-            os.remove(os.path.join(data_dir, f))
+            os.remove(os.path.join(local_dir, f))
+
+    execute_str = 'sudo chmod 777 -R /tmp'
+    stdin, stdout, stderr = client.exec_command(execute_str)
 
     for file in sftp.listdir(data_dir):
         if file.endswith('.csv'):
@@ -161,6 +170,10 @@ def ssh_get_files(self, client, machine_id):
                 self.experiment_name,
                 'machine_energy_results') + 'machine_' +
                 str(machine_id) + '_' + file)
+
+    files = sftp.listdir(path=data_dir)
+    for file in files:
+        sftp.remove(data_dir + file)
 
     sftp.close()
 
@@ -180,13 +193,14 @@ def compare_results(self):
     res = pd.DataFrame({'machine_id': machine_ids,
                         'emissions': emissions,
                         'energy_consumption': energy_consumption})
-    save_folder = 'machine_energy_comparison'
+
+    save_folder = 'machine_energy_comparison/'
 
     if not os.path.exists(save_folder):
         os.mkdir(save_folder)
 
     filename = time.strftime('%D%H%M%S').replace('/', '')
-    filename = filename + '/results.csv'
+    filename = filename + '_results.csv'
 
     res.to_csv(save_folder + '/' + filename)
 
