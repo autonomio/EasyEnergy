@@ -40,6 +40,4 @@ def tracker_run(self, docker=False):
     for machine_id, client in clients.items():
         ssh_get_files(self, client, machine_id)
 
-    res = compare_results(self)
-    print('-'*30)
-    print(res)
+    compare_results(self)
