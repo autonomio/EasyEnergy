@@ -21,6 +21,9 @@ class MachineEnergy:
         if not os.path.exists(self.dest_dir):
             os.mkdir(self.dest_dir)
 
+        if not os.path.exists(self.data_dir):
+            os.mkdir(self.data_dir)
+
         if not os.path.exists(self.dest_dir + '/machine_energy_results'):
             os.mkdir(self.dest_dir+'/machine_energy_results')
 

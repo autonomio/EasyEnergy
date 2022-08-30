@@ -165,6 +165,7 @@ def run__tracker_local(self):
                   )
         shutil.move(og_filepath,
                     local_dir)
+    print('completed experiment in machine id 0')
 
 
 def ssh_get_files(self, client, machine_id):

@@ -13,12 +13,6 @@ def tracker_run(self, docker=False):
     run_local = self.run_local
     threads = []
 
-    if run_local:
-        args = (self)
-        thread = threading.Thread(target=run__tracker_local, args=args)
-        thread.start()
-        threads.append(thread)
-
     clients = ssh_connect(self)
 
     for machine_id, client in clients.items():
@@ -40,6 +34,12 @@ def tracker_run(self, docker=False):
             thread = threading.Thread(target=docker_machine_run, args=args)
             thread.start()
             threads.append(thread)
+
+    if run_local:
+        args = (self, )
+        thread = threading.Thread(target=run__tracker_local, args=args)
+        thread.start()
+        threads.append(thread)
 
     for t in threads:
         t.join()
