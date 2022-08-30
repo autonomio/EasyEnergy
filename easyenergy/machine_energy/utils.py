@@ -98,6 +98,23 @@ def ssh_file_transfer(self, client, machine_id):
     sftp.close()
 
 
+def return_execute_str(self):
+
+    if not self.train_func:
+        framework = self.framework
+        if framework == 'keras':
+            execute_str = 'python3 /tmp/{}/easyenergy_mnist_keras.py'.format(
+                    self.experiment_name)
+        elif framework == 'pl':
+            execute_str = 'python3 /tmp/{}/easyenergy_mnist_pl.py'.format(
+                    self.experiment_name)
+    else:
+        execute_str = 'python3 /tmp/{}/easyenergy_custom_model.py'.format(
+            self.experiment_name)
+
+    return execute_str
+
+
 def ssh_run(self, client, machine_id):
     '''Run the transmitted script remotely
 
@@ -111,18 +128,8 @@ def ssh_run(self, client, machine_id):
     None.
 
     '''
-    if not self.train_func:
 
-        if self.framework == 'keras':
-            execute_str = 'python3 /tmp/{}/easyenergy_mnist_keras.py'.format(
-                self.experiment_name)
-        elif self.framework == 'pl':
-            execute_str = 'python3 /tmp/{}/easyenergy_mnist_pl.py'.format(
-                self.experiment_name)
-
-    else:
-        execute_str = 'python3 /tmp/{}/easyenergy_custom_model.py'.format(
-            self.experiment_name)
+    execute_str = return_execute_str(self)
 
     stdin, stdout, stderr = client.exec_command(execute_str)
 
@@ -140,6 +147,11 @@ def ssh_run(self, client, machine_id):
             print(line)
         except Exception as e:
             print(e)
+
+
+def run_local(self):
+    execute_str = return_execute_str(self)
+    os.system(execute_str)
 
 
 def ssh_get_files(self, client, machine_id):
