@@ -13,6 +13,10 @@ class MachineEnergy:
         self.experiment_name = experiment_name
         self.dest_dir = '/tmp/{}/'.format(experiment_name)
         self.run_local = run_local
+        local_dir = '/tmp/{}/machine_energy_results'.format(experiment_name)
+        self.local_dir = local_dir
+        data_dir = '/tmp/{}/energy_results/'.format(experiment_name)
+        self.data_dir = data_dir
 
         if not os.path.exists(self.dest_dir):
             os.mkdir(self.dest_dir)

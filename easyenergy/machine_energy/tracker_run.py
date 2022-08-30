@@ -1,4 +1,4 @@
-from .utils import ssh_connect, ssh_file_transfer, ssh_run
+from .utils import ssh_connect, ssh_file_transfer, ssh_run, run__tracker_local
 from .utils import ssh_get_files, compare_results
 
 from .docker_utils import write_shell_script, write_dockerfile
@@ -11,9 +11,16 @@ import threading
 def tracker_run(self, docker=False):
 
     run_local = self.run_local
+    threads = []
+
+    if run_local:
+        args = (self)
+        thread = threading.Thread(target=run__tracker_local, args=args)
+        thread.start()
+        threads.append(thread)
 
     clients = ssh_connect(self)
-    threads = []
+
     for machine_id, client in clients.items():
 
         ssh_file_transfer(self, client, machine_id)

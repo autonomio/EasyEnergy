@@ -149,18 +149,29 @@ def ssh_run(self, client, machine_id):
             print(e)
 
 
-def run_local(self):
+def run__tracker_local(self):
+
     execute_str = return_execute_str(self)
     os.system(execute_str)
+
+    data_dir = self.data_dir
+    local_dir = self.local_dir
+
+    for file in os.listdir(data_dir):
+        og_filepath = data_dir + '/' + file
+        os.rename(og_filepath,
+                  'machine_' +
+                  str(0) + '_' + file
+                  )
+        shutil.move(og_filepath,
+                    local_dir)
 
 
 def ssh_get_files(self, client, machine_id):
     '''Get files via ssh from a machine'''
-    experiment_name = self.experiment_name
     sftp = client.open_sftp()
-    data_dir = '/tmp/{}/energy_results/'.format(experiment_name)
-    local_dir = '/tmp/{}/machine_energy_results'.format(experiment_name)
-    self.local_dir = local_dir
+    data_dir = self.data_dir
+    local_dir = self.local_dir
 
     try:
         sftp.chdir(data_dir)  # Test if dest dir exists
@@ -195,13 +206,15 @@ def compare_results(self):
     emissions = []
     energy_consumption = []
     machine_ids = []
+
     for f in os.listdir(local_dir):
-        if f.endswith('.csv'):
+        if f.endswith('.csv') and f.startswith('machine'):
             data = pd.read_csv(local_dir + '/' + f)
             machine_id = int(f.split('_')[1])
             emissions.append(data['emissions'])
             energy_consumption.append(data['energy_consumed'])
             machine_ids.append(machine_id)
+
     res = pd.DataFrame({'machine_id': machine_ids,
                         'emissions': emissions,
                         'energy_consumption': energy_consumption})
