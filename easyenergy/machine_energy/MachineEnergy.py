@@ -43,4 +43,10 @@ class MachineEnergy:
                       'w') as outfile:
                 json.dump(self.config_data, outfile, indent=2)
 
+        if 'run_local' in config.keys():
+            run_local = config['run_local']
+            self.run_local = run_local
+        else:
+            self.run_local = False
+
         tracker_run(self, docker=docker)
