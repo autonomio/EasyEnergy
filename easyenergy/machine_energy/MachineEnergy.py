@@ -8,9 +8,11 @@ class MachineEnergy:
                  framework='keras',
                  train_func=None,
                  docker=False,
+                 run_local=False
                  ):
         self.experiment_name = experiment_name
         self.dest_dir = '/tmp/{}/'.format(experiment_name)
+        self.run_local = run_local
 
         if not os.path.exists(self.dest_dir):
             os.mkdir(self.dest_dir)

@@ -10,9 +10,10 @@ import threading
 
 def tracker_run(self, docker=False):
 
+    run_local = self.run_local
+
     clients = ssh_connect(self)
     threads = []
-
     for machine_id, client in clients.items():
 
         ssh_file_transfer(self, client, machine_id)

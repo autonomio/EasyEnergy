@@ -137,9 +137,7 @@ def docker_image_setup(self, client, machine_id):
 
     image_name = self.image_name
     pullstr = 'sudo docker pull {}'.format(image_name)
-
-    pull = [pullstr]
-    execute_strings += pull
+    execute_strings.append(pullstr)
 
     for execute_str in execute_strings:
         stdin, stdout, stderr = client.exec_command(execute_str)
