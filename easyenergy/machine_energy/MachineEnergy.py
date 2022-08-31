@@ -15,6 +15,7 @@ class MachineEnergy:
         self.run_local = run_local
         local_dir = '/tmp/{}/machine_energy_results'.format(experiment_name)
         self.local_dir = local_dir
+
         data_dir = '/tmp/{}/energy_results/'.format(experiment_name)
         self.data_dir = data_dir
 
@@ -24,8 +25,12 @@ class MachineEnergy:
         if not os.path.exists(self.data_dir):
             os.mkdir(self.data_dir)
 
-        if not os.path.exists(self.dest_dir + '/machine_energy_results'):
-            os.mkdir(self.dest_dir+'/machine_energy_results')
+        if not os.path.exists(local_dir):
+            os.mkdir(local_dir)
+
+        for f in os.listdir(local_dir):
+            if f.endswith('.csv'):
+                os.remove(os.path.join(local_dir, f))
 
         self.framework = framework
         self.train_func = train_func

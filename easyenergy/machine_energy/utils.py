@@ -149,22 +149,27 @@ def ssh_run(self, client, machine_id):
             print(e)
 
 
+def get_latest_local_file(self):
+    res_dir = '/tmp/energy_results/'
+    files = [res_dir + file for file in os.listdir(res_dir) if
+             file.endswith('.csv')]
+    latest_file = max(files, key=os.path.getctime)
+    return latest_file
+
+
 def run__tracker_local(self):
 
     execute_str = return_execute_str(self)
     os.system(execute_str)
-
-    data_dir = self.data_dir
+    latest_file = get_latest_local_file(self)
     local_dir = self.local_dir
 
-    for file in os.listdir(data_dir):
-        og_filepath = data_dir + '/' + file
-        os.rename(og_filepath,
-                  'machine_' +
-                  str(0) + '_' + file
-                  )
-        shutil.move(og_filepath,
-                    local_dir)
+    shutil.move(latest_file,
+                local_dir + '/' +
+                'machine_' +
+                str(0) + '_' +
+                os.path.basename(latest_file)
+                )
     print('completed experiment in machine id 0')
 
 
@@ -172,7 +177,6 @@ def ssh_get_files(self, client, machine_id):
     '''Get files via ssh from a machine'''
     sftp = client.open_sftp()
     data_dir = self.data_dir
-    local_dir = self.local_dir
 
     try:
         sftp.chdir(data_dir)  # Test if dest dir exists
@@ -180,10 +184,6 @@ def ssh_get_files(self, client, machine_id):
     except IOError:
         sftp.mkdir(data_dir)  # Create dest dir
         sftp.chdir(data_dir)
-
-    for f in os.listdir(local_dir):
-        if f.endswith('.csv'):
-            os.remove(os.path.join(local_dir, f))
 
     execute_str = 'sudo chmod 777 -R /tmp'
     stdin, stdout, stderr = client.exec_command(execute_str)
