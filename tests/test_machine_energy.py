@@ -11,3 +11,4 @@ with open('config.json', 'r') as f:
 def test_machine_energy():
     me = MachineEnergy(config)
 
+test_machine_energy()
