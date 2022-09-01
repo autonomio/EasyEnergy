@@ -36,6 +36,16 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Create config.json
+      id: create-json
+      uses: jsdaniell/create-json@1.1.2
+      with:
+        name: "config.json"
+        json: ${{ secrets.MACHINE_CONFIG }}
+    - name: Add Key
+      run: |
+        echo "${{ secrets.AUTONOMIO_DEV_PEM }}" > autonomio-dev.pem
+        chmod 0400 autonomio-dev.pem
     - name: Test with pytest
       run: |
         pip install --upgrade pip
@@ -44,3 +54,5 @@ jobs:
         python setup.py install
         pytest tests/test_kerascallbacks.py
         pytest tests/test_plcallbacks.py
+        pytest tests/test_machine_energy.py
+        
