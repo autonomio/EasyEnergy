@@ -41,7 +41,7 @@ jobs:
       uses: jsdaniell/create-json@1.1.2
       with:
         name: "config.json"
-        json: ${{ secrets.CONFIG_JSON }}
+        json: ${{ secrets.MACHINE_CONFIG }}
     - name: Add Key
       run: |
         echo "${{ secrets.AUTONOMIO_DEV_PEM }}" > autonomio-dev.pem
