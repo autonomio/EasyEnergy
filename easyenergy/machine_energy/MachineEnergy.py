@@ -7,11 +7,10 @@ class MachineEnergy:
     def __init__(self, config, experiment_name='machine_energy',
                  framework='keras',
                  train_func=None,
-                 run_local=False
                  ):
         self.experiment_name = experiment_name
         self.dest_dir = '/tmp/{}/'.format(experiment_name)
-        self.run_local = run_local
+
         local_dir = '/tmp/{}/machine_energy_results'.format(experiment_name)
         self.local_dir = local_dir
 
