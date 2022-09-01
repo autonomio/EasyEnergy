@@ -3,12 +3,11 @@ import json
 import shutil
 
 
-shutil.copy('../autonomio-dev.pem', 'autonomio-dev.pem')
+# shutil.copy('../autonomio-dev.pem', 'autonomio-dev.pem')
 
-with open('../config.json', 'r') as f:
+with open('config.json', 'r') as f:
     config = json.load(f)
 
 def test_machine_energy():
     me = MachineEnergy(config)
 
-test_machine_energy()
