@@ -1,0 +1,89 @@
+name: Build
+2
+​
+3
+on: [push]
+4
+​
+5
+jobs:
+6
+  build:
+7
+    name: Python ${{ matrix.python-version }} and ${{ matrix.os }}
+8
+    runs-on: ${{ matrix.os }}
+9
+    strategy:
+10
+      max-parallel: 9
+11
+      matrix:
+12
+        python-version: [3.7, 3.8]
+13
+        os: [ubuntu-latest, macos-latest]
+14
+​
+15
+    steps:
+16
+    - uses: actions/checkout@v1
+17
+    - name: Python ${{ matrix.python-version }}
+18
+      uses: actions/setup-python@v1
+19
+      with:
+20
+        python-version: ${{ matrix.python-version }}
+21
+    - name: Dependencies
+22
+      run: |
+23
+        python -m pip install --upgrade pip
+24
+        pip install -r requirements.txt
+25
+    - name: Style
+26
+      run: |
+27
+        pip install flake8
+28
+        # stop the build if there are Python syntax errors or undefined names
+29
+        flake8 . --count --select=E9,F63,F7 --show-source --statistics
+30
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+31
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+32
+    - name: Create config.json
+33
+      id: create-json
+34
+      uses: jsdaniell/create-json@1.1.2
+35
+      with:
+36
+        name: "config.json"
+37
+        json: ${{ secrets.CONFIG_JSON }}
+38
+    - name: Add Key
+39
+      run: |
+40
+        echo "${{ secrets.AUTONOMIO_DEV_PEM }}" > autonomio-dev.pem
+41
+        chmod 0400 autonomio-dev.pem
+42
+    - name: Tests
+43
+      run: |
+44
+        pip install tensorflow>=2.0
+45
+        python test_machine_energy.py
