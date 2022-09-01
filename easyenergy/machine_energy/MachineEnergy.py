@@ -7,7 +7,6 @@ class MachineEnergy:
     def __init__(self, config, experiment_name='machine_energy',
                  framework='keras',
                  train_func=None,
-                 docker=False,
                  run_local=False
                  ):
         self.experiment_name = experiment_name
@@ -56,5 +55,9 @@ class MachineEnergy:
             self.run_local = run_local
         else:
             self.run_local = False
+
+        docker = False
+        if 'run_docker' in config.keys():
+            docker = config['run_docker']
 
         tracker_run(self, docker=docker)
