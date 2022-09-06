@@ -22,7 +22,12 @@ VERSION = '0.0.1'
 
 install_requires = ['tensorflow',
                     'pytorch_lightning',
-                    'codecarbon']
+                    'codecarbon',
+                    'paramiko']
+
+extras = {'callbacks':  ['tensorflow',
+                         'pytorch_lightning',
+                         'codecarbon']}
 
 
 setuptools.setup(
@@ -36,8 +41,8 @@ setuptools.setup(
     license=LICENSE,
     url=DOWNLOAD_URL,
     install_requires=install_requires,
+    extras_requires=extras,
     packages=setuptools.find_packages(),
-    extras_require={"pl": ["pytorch_lightning"]},
     python_requires='>=3.6',
     include_package_data=True
 )
