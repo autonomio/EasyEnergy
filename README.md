@@ -22,7 +22,7 @@ Given a list of machines, this feature helps track the machine with the least en
 
 ### Installing latest version from source
 
-pip install git+https://github.com/autonomio/EasyEnergy
+`pip install git+https://github.com/autonomio/EasyEnergy`
 
 
 ## :book: Docs
