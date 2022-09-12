@@ -46,7 +46,7 @@ A config will look like this:
 
 Argument | Input | Description
 --------- | ------- | -----------
-`run_local` | bool | if set to true, the local machine where the script runs will also be included in energy tracking.    
+`run_local` | bool | if set to true, the local machine where the script runs will also be included in energy tracking. The local machine is automatically added as machine id `0` 
 `run_docker` | bool | if set to true, pulls docker images to respective remote machines and runs Energy Tracking in docker containers.      
 `machines` | list of dict | list of machine configurations    
 `machine_id` | int | id for each machine in ascending order.   
