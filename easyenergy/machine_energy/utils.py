@@ -78,8 +78,6 @@ def ssh_file_transfer(self, client, machine_id):
         sftp.mkdir(self.dest_dir)  # Create dest dir
         sftp.chdir(self.dest_dir)
 
-    create_temp_file(self)
-
     if not self.train_func:
         files = ['easyenergy_mnist_keras.py',
                  'easyenergy_mnist_pl.py',
@@ -91,6 +89,8 @@ def ssh_file_transfer(self, client, machine_id):
             self.experiment_name)):
         if file.startswith('easyenergy'):
             sftp.remove('/tmp/{}/'.format(self.experiment_name) + file)
+
+    create_temp_file(self)
 
     for file in os.listdir('/tmp/{}'.format(self.experiment_name)):
         if file in files:
