@@ -104,10 +104,10 @@ def return_execute_str(self):
         framework = self.framework
         if framework == 'keras':
             execute_str = 'python3 /tmp/{}/easyenergy_mnist_keras.py'.format(
-                    self.experiment_name)
+                self.experiment_name)
         elif framework == 'pl':
             execute_str = 'python3 /tmp/{}/easyenergy_mnist_pl.py'.format(
-                    self.experiment_name)
+                self.experiment_name)
     else:
         execute_str = 'python3 /tmp/{}/easyenergy_custom_model.py'.format(
             self.experiment_name)
