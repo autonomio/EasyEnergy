@@ -26,13 +26,14 @@ def write_shell_script(self):
 def write_dockerfile(self, platform='amd'):
     framework = self.framework
     experiment_name = self.experiment_name
+    train_func = self.train_func
 
-    if framework == 'keras':
-        filename = 'easyenergy_mnist_keras.py'
+    if not train_func:
+        if framework == 'keras':
+            filename = 'easyenergy_mnist_keras.py'
 
-    elif framework == 'pl':
-        filename = 'easyenergy_mnist_pl.py'
-
+        elif framework == 'pl':
+            filename = 'easyenergy_mnist_pl.py'
     else:
         filename = 'easyenergy_custom_model.py'
 
