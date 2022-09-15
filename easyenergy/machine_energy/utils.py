@@ -183,7 +183,13 @@ def ssh_run(self, client, machine_id):
 
 
 def get_latest_local_file(self):
-    res_dir = '/tmp/energy_results/'
+
+    train_func = self.train_func
+    if train_func:
+        experiment_name = self.experiment_name
+        res_dir = '/tmp/{}/energy_results'.format(experiment_name)
+    else:
+        res_dir = '/tmp/energy_results/'
     files = [res_dir + file for file in os.listdir(res_dir) if
              file.endswith('.csv')]
     latest_file = max(files, key=os.path.getctime)
