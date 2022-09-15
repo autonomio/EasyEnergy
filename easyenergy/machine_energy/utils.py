@@ -38,24 +38,28 @@ def ssh_connect(self):
 
 
 def return_output_dir(self, output_dir='energy_results'):
+    experiment_name = self.experiment_name
+    output_dir = '/tmp/{}/{}'.format(experiment_name,
+                                     output_dir)
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
     filename = time.strftime('%D%H%M%S').replace('/', '')
     filename = filename + '_predict_results.csv'
+
     return output_dir, filename
 
 
 def local_codecarbon_script(self, output_dir, output_file):
     codecarbon_str = '''
 from codecarbon import EmissionsTracker
-output_dir = {}
-output_file = {}
+output_dir = "{}"
+output_file = "{}"
 tr = EmissionsTracker(
     output_dir=output_dir,
     output_file=output_file
     )
 tr.start()
-'''
+'''.format(output_dir, output_file)
     return codecarbon_str
 
 
