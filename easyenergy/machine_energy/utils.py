@@ -37,6 +37,14 @@ def ssh_connect(self):
     return clients
 
 
+def return_output_dir(self, output_dir='energy_results'):
+    if not os.path.exists(output_dir):
+        os.mkdir(output_dir)
+    filename = time.strftime('%D%H%M%S').replace('/', '')
+    filename = filename + '_predict_results.csv'
+    return output_dir, filename
+
+
 def create_temp_file(self):
 
     experiment_name = self.experiment_name
@@ -60,6 +68,8 @@ def create_temp_file(self):
         filestr = getsource(train_func)
         func_name = train_func.__name__
         run_command = func_name + '()'
+        codecarbon_str = 'from codecarbon import EmissionsTracker'
+        codecarbon_str = codecarbon_str + '\n' + 'tracker = EmissionsTracker()'
         filestr = filestr + '\n' + run_command
         with open("/tmp/{}/easyenergy_custom_model.py".format(
                 experiment_name), "w") as f:
