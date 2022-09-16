@@ -188,7 +188,8 @@ def docker_machine_run(self, client, machine_id):
             'easyenergy_docker_remote', 'easyenergy_docker_remote'),
         cp_str,
         'sudo docker stop easyenergy_docker_remote',
-        'sudo docker rm easyenergy_docker_remote']
+        'sudo docker rm easyenergy_docker_remote',
+        'sudo docker system prune -af']
 
     cmd_strings = rm_container + build + execute_strings
     execute_strings = []
