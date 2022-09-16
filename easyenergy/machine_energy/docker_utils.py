@@ -162,20 +162,31 @@ def docker_machine_run(self, client, machine_id):
     ''' Run EasyEnergy using docker'''
     machine_id = str(machine_id)
     experiment_name = self.experiment_name
+    train_func = self.train_func
+
     print('started experiment in machine id {}'.format(machine_id))
     rm_container = ['sudo docker stop easyenergy_docker_remote',
                     'sudo docker rm easyenergy_docker_remote']
     build = ['sudo docker build -t easyenergy_docker_remote -f /tmp/' +
              experiment_name + '/Dockerfile /tmp/' + experiment_name + '/']
+    cp_str = '/tmp/{}/energy_results/'.format(experiment_name)
+
+    if train_func:
+        cp_str = 'sudo docker container cp -a {}:/tmp/{}/{}/ /tmp/{}/'.format(
+            'easyenergy_docker_remote',
+            experiment_name,
+            'energy_results',
+            experiment_name)
+    else:
+        cp_str = 'sudo docker container cp -a {}:/tmp/{}/ /tmp/{}/'.format(
+            'easyenergy_docker_remote',
+            'energy_results',
+            experiment_name)
     execute_strings = [
 
         'sudo docker run  --name {} {}'.format(
             'easyenergy_docker_remote', 'easyenergy_docker_remote'),
-
-        'sudo docker container cp -a {}:/tmp/{}/ /tmp/{}/'.format(
-            'easyenergy_docker_remote',
-            'energy_results',
-            experiment_name),
+        cp_str,
         'sudo docker stop easyenergy_docker_remote',
         'sudo docker rm easyenergy_docker_remote']
 
