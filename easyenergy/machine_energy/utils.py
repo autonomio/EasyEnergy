@@ -37,6 +37,39 @@ def ssh_connect(self):
     return clients
 
 
+def return_output_dir(self, output_dir='energy_results'):
+    experiment_name = self.experiment_name
+    output_dir = '/tmp/{}/{}'.format(experiment_name,
+                                     output_dir)
+    if not os.path.exists(output_dir):
+        os.mkdir(output_dir)
+    filename = time.strftime('%D%H%M%S').replace('/', '')
+    filename = filename + '_predict_results.csv'
+
+    return output_dir, filename
+
+
+def local_codecarbon_script(self, output_dir, output_file):
+    codecarbon_str = '''
+from codecarbon import EmissionsTracker
+import os
+
+output_dir = "{}"
+output_file = "{}"
+
+if not os.path.exists(output_dir):
+    os.mkdir(output_dir)
+
+tr = EmissionsTracker(
+    output_dir=output_dir,
+    output_file=output_file
+    )
+
+tr.start()
+'''.format(output_dir, output_file)
+    return codecarbon_str
+
+
 def create_temp_file(self):
 
     experiment_name = self.experiment_name
@@ -60,7 +93,14 @@ def create_temp_file(self):
         filestr = getsource(train_func)
         func_name = train_func.__name__
         run_command = func_name + '()'
+
+        output_dir, output_file = return_output_dir(self)
+        codecarbon_str = local_codecarbon_script(self,
+                                                 output_dir,
+                                                 output_file)
+        filestr = filestr + '\n' + codecarbon_str
         filestr = filestr + '\n' + run_command
+        filestr = filestr + '\n' + 'tr.stop()'
         with open("/tmp/{}/easyenergy_custom_model.py".format(
                 experiment_name), "w") as f:
             f.write(filestr)
@@ -78,23 +118,26 @@ def ssh_file_transfer(self, client, machine_id):
         sftp.mkdir(self.dest_dir)  # Create dest dir
         sftp.chdir(self.dest_dir)
 
-    create_temp_file(self)
-
     if not self.train_func:
         files = ['easyenergy_mnist_keras.py',
-                 'easyenergy_mnist_pl.py',
-                 'easyenergy_config.json']
+                 'easyenergy_mnist_pl.py']
+
     else:
         files = ['easyenergy_custom_model.py']
+
+    files.append('easyenergy_config.json')
 
     for file in sftp.listdir('/tmp/{}'.format(
             self.experiment_name)):
         if file.startswith('easyenergy'):
-            sftp.remove('/tmp/{}/'.format(self.experiment_name) + file)
+            sftp.remove(self.dest_dir + file)
 
-    for file in os.listdir('/tmp/{}'.format(self.experiment_name)):
+    create_temp_file(self)
+
+    for file in os.listdir('/tmp/{}/'.format(self.experiment_name)):
         if file in files:
-            sftp.put('/tmp/{}/'.format(self.experiment_name) + file, file)
+            sftp.put('/tmp/{}/'.format(self.experiment_name) + file,
+                     self.dest_dir + file)
     sftp.close()
 
 
@@ -104,10 +147,10 @@ def return_execute_str(self):
         framework = self.framework
         if framework == 'keras':
             execute_str = 'python3 /tmp/{}/easyenergy_mnist_keras.py'.format(
-                    self.experiment_name)
+                self.experiment_name)
         elif framework == 'pl':
             execute_str = 'python3 /tmp/{}/easyenergy_mnist_pl.py'.format(
-                    self.experiment_name)
+                self.experiment_name)
     else:
         execute_str = 'python3 /tmp/{}/easyenergy_custom_model.py'.format(
             self.experiment_name)
@@ -150,7 +193,13 @@ def ssh_run(self, client, machine_id):
 
 
 def get_latest_local_file(self):
-    res_dir = '/tmp/energy_results/'
+
+    train_func = self.train_func
+    if train_func:
+        experiment_name = self.experiment_name
+        res_dir = '/tmp/{}/energy_results/'.format(experiment_name)
+    else:
+        res_dir = '/tmp/energy_results/'
     files = [res_dir + file for file in os.listdir(res_dir) if
              file.endswith('.csv')]
     latest_file = max(files, key=os.path.getctime)
