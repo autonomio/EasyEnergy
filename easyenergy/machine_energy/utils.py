@@ -52,12 +52,19 @@ def return_output_dir(self, output_dir='energy_results'):
 def local_codecarbon_script(self, output_dir, output_file):
     codecarbon_str = '''
 from codecarbon import EmissionsTracker
+import os
+
 output_dir = "{}"
 output_file = "{}"
+
+if not os.path.exists(output_dir):
+    os.mkdir(output_dir)
+
 tr = EmissionsTracker(
     output_dir=output_dir,
     output_file=output_file
     )
+
 tr.start()
 '''.format(output_dir, output_file)
     return codecarbon_str
@@ -113,10 +120,12 @@ def ssh_file_transfer(self, client, machine_id):
 
     if not self.train_func:
         files = ['easyenergy_mnist_keras.py',
-                 'easyenergy_mnist_pl.py',
-                 'easyenergy_config.json']
+                 'easyenergy_mnist_pl.py']
+
     else:
         files = ['easyenergy_custom_model.py']
+
+    files.append('easyenergy_config.json')
 
     for file in sftp.listdir('/tmp/{}'.format(
             self.experiment_name)):
