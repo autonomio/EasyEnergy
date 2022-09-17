@@ -130,13 +130,14 @@ def ssh_file_transfer(self, client, machine_id):
     for file in sftp.listdir('/tmp/{}'.format(
             self.experiment_name)):
         if file.startswith('easyenergy'):
-            sftp.remove('/tmp/{}/'.format(self.experiment_name) + file)
+            sftp.remove(self.dest_dir + file)
 
     create_temp_file(self)
 
-    for file in os.listdir('/tmp/{}'.format(self.experiment_name)):
+    for file in os.listdir('/tmp/{}/'.format(self.experiment_name)):
         if file in files:
-            sftp.put('/tmp/{}/'.format(self.experiment_name) + file, file)
+            sftp.put('/tmp/{}/'.format(self.experiment_name) + file,
+                     self.dest_dir + file)
     sftp.close()
 
 
