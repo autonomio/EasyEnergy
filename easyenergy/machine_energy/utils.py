@@ -110,6 +110,7 @@ def ssh_file_transfer(self, client, machine_id):
     '''Transfer the model script to the remote machines'''
 
     sftp = client.open_sftp()
+    sftp.rmdir(self.dest_dir)
 
     try:
         sftp.chdir(self.dest_dir)  # Test if dest dir exists
@@ -126,11 +127,6 @@ def ssh_file_transfer(self, client, machine_id):
         files = ['easyenergy_custom_model.py']
 
     files.append('easyenergy_config.json')
-
-    for file in sftp.listdir(self.dest_dir):
-        print('remove'*10)
-        print(file)
-        sftp.remove(self.dest_dir + file)
 
     create_temp_file(self)
 
