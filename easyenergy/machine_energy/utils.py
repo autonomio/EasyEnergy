@@ -130,8 +130,7 @@ def ssh_file_transfer(self, client, machine_id):
     for file in sftp.listdir(self.dest_dir):
         print('remove'*10)
         print(file)
-        if file.startswith('easyenergy'):
-            sftp.remove(self.dest_dir + file)
+        sftp.remove(self.dest_dir + file)
 
     create_temp_file(self)
 
