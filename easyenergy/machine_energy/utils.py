@@ -127,8 +127,7 @@ def ssh_file_transfer(self, client, machine_id):
 
     files.append('easyenergy_config.json')
 
-    for file in sftp.listdir('/tmp/{}/'.format(
-            self.experiment_name)):
+    for file in sftp.listdir(self.dest_dir):
         print('remove'*10)
         print(file)
         if file.startswith('easyenergy'):
@@ -141,7 +140,7 @@ def ssh_file_transfer(self, client, machine_id):
             print('put'*10)
             print(file)
             sftp.put('/tmp/{}/'.format(self.experiment_name) + file,
-                     self.dest_dir + file)
+                     file)
     sftp.close()
 
 
