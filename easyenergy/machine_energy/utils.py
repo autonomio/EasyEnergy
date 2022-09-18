@@ -110,7 +110,11 @@ def ssh_file_transfer(self, client, machine_id):
     '''Transfer the model script to the remote machines'''
 
     sftp = client.open_sftp()
-    sftp.rmdir(self.dest_dir)
+
+    try:
+        sftp.rmdir(self.dest_dir)
+    except OSError:
+        pass
 
     try:
         sftp.chdir(self.dest_dir)  # Test if dest dir exists
