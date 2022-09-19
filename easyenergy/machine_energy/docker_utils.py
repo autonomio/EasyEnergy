@@ -91,8 +91,6 @@ def docker_ssh_file_transfer(self, client):
 
     for file in os.listdir("/tmp/{}".format(experiment_name)):
         if file in docker_files:
-            print('dockerput'*20)
-            print(file)
             sftp.put("/tmp/{}/".format(
                 experiment_name) + file,
                 file)
