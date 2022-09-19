@@ -38,16 +38,13 @@ class MachineEnergy:
             with open(config, 'r') as f:
                 self.config_data = json.load(f)
 
-            with open('/tmp/{}/easyenergy_config.json'.format(experiment_name),
-                      'w') as outfile:
-                json.dump(self.config_data, outfile, indent=2)
-
         # Handle the case when `config` is dict
         elif isinstance(config, dict):
             self.config_data = config
-            with open('/tmp/{}/easyenergy_config.json'.format(experiment_name),
-                      'w') as outfile:
-                json.dump(self.config_data, outfile, indent=2)
+
+        with open('/tmp/{}/easyenergy_config.json'.format(experiment_name),
+                  'w') as outfile:
+            json.dump(self.config_data, outfile, indent=2)
 
         if 'run_local' in config.keys():
             run_local = config['run_local']
