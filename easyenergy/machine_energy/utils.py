@@ -112,6 +112,11 @@ def ssh_file_transfer(self, client, machine_id):
     sftp = client.open_sftp()
 
     try:
+        sftp.rmdir(self.dest_dir)
+    except OSError:
+        pass
+
+    try:
         sftp.chdir(self.dest_dir)  # Test if dest dir exists
 
     except IOError:
@@ -127,17 +132,13 @@ def ssh_file_transfer(self, client, machine_id):
 
     files.append('easyenergy_config.json')
 
-    for file in sftp.listdir('/tmp/{}'.format(
-            self.experiment_name)):
-        if file.startswith('easyenergy'):
-            sftp.remove(self.dest_dir + file)
-
     create_temp_file(self)
 
     for file in os.listdir('/tmp/{}/'.format(self.experiment_name)):
         if file in files:
             sftp.put('/tmp/{}/'.format(self.experiment_name) + file,
-                     self.dest_dir + file)
+                     file,
+                     confirm=False)
     sftp.close()
 
 

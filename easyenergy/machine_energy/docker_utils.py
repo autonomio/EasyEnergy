@@ -75,7 +75,6 @@ def docker_ssh_file_transfer(self, client):
     '''Transfer the docker scripts to the remote machines'''
 
     experiment_name = self.experiment_name
-    dest_dir = self.dest_dir
 
     write_dockerfile(self)
 
@@ -93,7 +92,8 @@ def docker_ssh_file_transfer(self, client):
     for file in os.listdir("/tmp/{}".format(experiment_name)):
         if file in docker_files:
             sftp.put("/tmp/{}/".format(
-                experiment_name) + file, dest_dir + file)
+                experiment_name) + file,
+                file)
 
     sftp.close()
 

@@ -55,4 +55,5 @@ jobs:
         pytest tests/test_kerascallbacks.py
         pytest tests/test_plcallbacks.py
         pytest tests/test_machine_energy.py
+        pytest tests/test_custom_func_machine_energy.py
         
