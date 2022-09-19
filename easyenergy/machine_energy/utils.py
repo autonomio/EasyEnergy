@@ -139,7 +139,7 @@ def ssh_file_transfer(self, client, machine_id):
             print('put'*10)
             print(file)
             sftp.put('/tmp/{}/'.format(self.experiment_name) + file,
-                     self.dest_dir + file,
+                     file,
                      confirm=False)
     sftp.close()
 
