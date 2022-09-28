@@ -4,6 +4,12 @@ from codecarbon import EmissionsTracker
 import os
 
 
+'''
+Callback class to pass as arguments for model.fit() in Keras.
+Runs Codecarbon tracking while training.
+'''
+
+
 class TrainCallback(Callback):
     def __init__(self, output_dir='energy_results'):
         if not os.path.exists(output_dir):
