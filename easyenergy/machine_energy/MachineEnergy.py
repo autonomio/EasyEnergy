@@ -5,7 +5,7 @@ from .tracker_run import tracker_run
 
 class MachineEnergy:
     '''
-    Handles all arguments and data organising and runs `tracker_run`.
+    Handles all arguments and data organising and runs `tracker_run()`.
     '''
 
     def __init__(self, config, experiment_name='machine_energy',

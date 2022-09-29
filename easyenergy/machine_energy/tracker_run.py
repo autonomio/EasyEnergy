@@ -9,6 +9,21 @@ import threading
 
 
 def tracker_run(self, docker=False):
+    '''
+    Handles all the steps to run the MachineEnergy features
+
+    Parameters
+    ----------
+    docker : TYPE: Bool, optional
+        DESCRIPTION. The default is False.
+        If set to true, pulls docker image to the remote machine
+        and runs as a docker container
+
+    Returns
+    -------
+    None.
+
+    '''
 
     run_local = self.run_local
     threads = []
