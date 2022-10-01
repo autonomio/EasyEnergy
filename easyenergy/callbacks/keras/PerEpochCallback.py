@@ -3,6 +3,11 @@ import time
 from codecarbon import EmissionsTracker
 import os
 
+'''
+Callback class to pass as arguments for model.fit() in Keras.
+Runs Codecarbon tracking per every epoch
+'''
+
 
 class PerEpochCallback(Callback):
     def __init__(self, output_dir='energy_results'):

@@ -4,18 +4,26 @@ from .tracker_run import tracker_run
 
 
 class MachineEnergy:
+    '''
+    Handles all arguments and data organising and runs `tracker_run()`.
+    '''
+
     def __init__(self, config, experiment_name='machine_energy',
                  framework='keras',
                  train_func=None,
                  ):
         self.experiment_name = experiment_name
+
+        # directory to save files in destination machines
         self.dest_dir = '/tmp/{}/'.format(experiment_name)
 
-        local_dir = '/tmp/{}/machine_energy_results'.format(experiment_name)
-        self.local_dir = local_dir
-
+        # directory to save data files in all machines
         data_dir = '/tmp/{}/energy_results/'.format(experiment_name)
         self.data_dir = data_dir
+
+        # directory to get files to local machine
+        local_dir = '/tmp/{}/machine_energy_results'.format(experiment_name)
+        self.local_dir = local_dir
 
         if not os.path.exists(self.dest_dir):
             os.mkdir(self.dest_dir)
@@ -32,6 +40,7 @@ class MachineEnergy:
 
         self.framework = framework
         self.train_func = train_func
+
         # Handle the case when `config` is a filepath
         if isinstance(config, str):
 

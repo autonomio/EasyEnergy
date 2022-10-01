@@ -4,6 +4,12 @@ from codecarbon import EmissionsTracker
 import os
 
 
+'''
+Callback class to pass as arguments for model.evaluate() in Keras.
+Runs Codecarbon tracking during model evaluation.
+'''
+
+
 class TestCallback(Callback):
     def __init__(self, output_dir='energy_results'):
         if not os.path.exists(output_dir):

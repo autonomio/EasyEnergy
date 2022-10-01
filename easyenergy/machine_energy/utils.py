@@ -38,6 +38,21 @@ def ssh_connect(self):
 
 
 def return_output_dir(self, output_dir='energy_results'):
+    '''
+
+    Parameters
+    ----------
+    output_dir : TYPE str, optional
+        DESCRIPTION. The default is 'energy_results'.
+
+    Returns
+    -------
+    output_dir : TYPE : str
+        output directory.
+    filename : TYPE: str
+        file name for energy output results.
+
+    '''
     experiment_name = self.experiment_name
     output_dir = '/tmp/{}/{}'.format(experiment_name,
                                      output_dir)
@@ -50,6 +65,23 @@ def return_output_dir(self, output_dir='energy_results'):
 
 
 def local_codecarbon_script(self, output_dir, output_file):
+    """
+    Creates string of python code for local machine execution
+    Parameters
+    ----------
+    output_dir : TYPE str
+        DESCRIPTION.
+        output directory to save the output from tracking
+    output_file : TYPE str
+        DESCRIPTION.
+
+    Returns
+    -------
+    codecarbon_str : TYPE str
+        DESCRIPTION.
+        string to be converted as python code for local machine to execute
+
+    """
     codecarbon_str = '''
 from codecarbon import EmissionsTracker
 import os
@@ -71,7 +103,14 @@ tr.start()
 
 
 def create_temp_file(self):
+    '''
+    Creates data and script files inside /tmp/ folder
 
+    Returns
+    -------
+    None.
+
+    '''
     experiment_name = self.experiment_name
     train_func = self.train_func
     framework = self.framework
@@ -143,6 +182,14 @@ def ssh_file_transfer(self, client, machine_id):
 
 
 def return_execute_str(self):
+    '''
+
+    Returns
+    -------
+    execute_str : TYPE : str
+        DESCRIPTION. String to be run as command to run the tracker file.
+
+    '''
 
     if not self.train_func:
         framework = self.framework
@@ -194,6 +241,15 @@ def ssh_run(self, client, machine_id):
 
 
 def get_latest_local_file(self):
+    '''
+
+    Returns
+    -------
+    latest_file : TYPE str
+        DESCRIPTION.
+        Gets file location of latest file generated after tracking
+
+    '''
 
     train_func = self.train_func
     if train_func:
@@ -208,6 +264,14 @@ def get_latest_local_file(self):
 
 
 def run__tracker_local(self):
+    '''
+    Run tracker in local machine
+
+    Returns
+    -------
+    None.
+
+    '''
 
     execute_str = return_execute_str(self)
     os.system(execute_str)
@@ -253,6 +317,15 @@ def ssh_get_files(self, client, machine_id):
 
 
 def compare_results(self):
+    '''
+
+    Returns
+    -------
+    res : TYPE str
+        DESCRIPTION.
+        Gets the results into a csv file with relevant details
+
+    '''
     local_dir = self.local_dir
     emissions = []
     energy_consumption = []

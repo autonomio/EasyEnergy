@@ -3,6 +3,11 @@ import time
 from codecarbon import EmissionsTracker
 import os
 
+'''
+Callback class to pass as arguments for model.predict() in Keras.
+Runs Codecarbon tracking per every batch while predicting.
+'''
+
 
 class PredictBatchCallback(Callback):
     def __init__(self, output_dir='energy_results'):
