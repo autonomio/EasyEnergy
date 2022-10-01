@@ -24,6 +24,9 @@ def write_shell_script(self):
 
 
 def write_dockerfile(self, platform='amd'):
+    '''
+    write Dockerfile for building docker images inside each machine
+    '''
     framework = self.framework
     experiment_name = self.experiment_name
     train_func = self.train_func
