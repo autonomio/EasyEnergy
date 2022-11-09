@@ -1,4 +1,5 @@
 import os
+from .utils import check_architecture
 
 
 def docker_install_commands(self):
@@ -23,7 +24,7 @@ def write_shell_script(self):
             f.write(command + '\n')
 
 
-def write_dockerfile(self, platform='amd'):
+def write_dockerfile(self, arch):
     '''
     write Dockerfile for building docker images inside each machine
     '''
@@ -40,7 +41,7 @@ def write_dockerfile(self, platform='amd'):
     else:
         filename = 'easyenergy_custom_model.py'
 
-    if platform == 'amd':
+    if arch == 'amd':
         image_name = 'abhijithneilabraham/easyenergy_docker_image_amd64'
     else:
         image_name = 'abhijithneilabraham/easyenergy_docker_image'
@@ -78,8 +79,9 @@ def docker_ssh_file_transfer(self, client):
     '''Transfer the docker scripts to the remote machines'''
 
     experiment_name = self.experiment_name
+    arch = check_architecture(self, client)
 
-    write_dockerfile(self)
+    write_dockerfile(self, arch)
 
     sftp = client.open_sftp()
 
