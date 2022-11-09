@@ -181,6 +181,111 @@ def ssh_file_transfer(self, client, machine_id):
     sftp.close()
 
 
+def check_architecture(self, client):
+
+    cmd = 'uname -m'
+    _, stdout, stderr = client.exec_command(cmd)
+    arch = 'amd'
+
+    if stderr:
+        for line in stderr.read().splitlines():
+            # Process each error line in the remote output
+            line = line.decode()
+            if 'x86_64' in line:
+                arch = 'amd'
+                return arch
+            else:
+                arch = 'arm'
+
+    if stdout:
+        for line in stdout.read().splitlines():
+            line = line.decode()
+            if 'x86_64' in line:
+                arch = 'amd'
+                return arch
+            else:
+                arch = 'arm'
+
+    return arch
+
+
+def get_stdout(self, stdout, stderr):
+    '''
+
+    Parameters
+    ----------
+    stdout | `Object` | stdout of remote machines
+    stderr | `Object` | stderr of remote machines
+
+    Returns
+    -------
+    out | `str` | flag to signal the error command to be taken care of
+
+    '''
+    out = None
+    allowed__errors = {
+        "docker: command not found": "docker_error",
+        "ERROR: Unsupported distribution 'amzn'": 'amazon_docker_install_error'
+        }
+
+    def __check_errline(line, allowed__errors):
+        out = None
+        for err in allowed__errors.keys():
+            if err in line:
+                out = allowed__errors[err]
+
+        if not out:
+            print(line)
+
+        return out
+
+    if stderr:
+        for line in stderr.read().splitlines():
+            # Process each error line in the remote output
+            line = line.decode()
+            stderr_flag = __check_errline(line, allowed__errors)
+            if stderr_flag:
+                out = stderr_flag
+
+    if stdout:
+        for line in stdout.read().splitlines():
+            line = line.decode()
+            stdout_flag = __check_errline(line, allowed__errors)
+            if stdout_flag:
+                out = stdout_flag
+
+    return out
+
+
+def detect_machine(self, client):
+    '''
+    Detect the machine in which the remote distribution is running in
+    '''
+
+    machines = {
+        "Amazon Linux": 'amazon_linux'
+        }
+    execute_str = r"grep -Po '(^|[ ,])NAME=\K[^,]*' /etc/os-release"
+    _, stdout, stderr = client.exec_command(execute_str)
+
+    def __check_machine(line, machines):
+        out = None
+        for machine in machines.keys():
+            if machine in line:
+                out = machines[machine]
+
+        return out
+
+    out = None
+
+    if stdout:
+        for line in stdout.read().splitlines():
+            line = line.decode()
+            out = __check_machine(line, machines)
+
+    return out
+
+
 def return_execute_str(self):
     '''
 
