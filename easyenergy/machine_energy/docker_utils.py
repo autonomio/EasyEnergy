@@ -1,5 +1,5 @@
 import os
-from .utils import check_architecture
+from .utils import check_architecture, get_stdout
 
 
 def docker_install_commands(self):
@@ -147,20 +147,7 @@ def docker_image_setup(self, client, machine_id):
 
     for execute_str in execute_strings:
         stdin, stdout, stderr = client.exec_command(execute_str)
-        if stderr:
-            for line in stderr:
-                try:
-                    # Process each error line in the remote output
-                    print(line)
-                except Exception as e:
-                    print(e)
-
-        for line in stdout:
-            try:
-                # Process each line in the remote output
-                print(line)
-            except Exception as e:
-                print(e)
+        get_stdout(self, stdout, stderr)
 
 
 def docker_machine_run(self, client, machine_id):
@@ -206,19 +193,6 @@ def docker_machine_run(self, client, machine_id):
 
     for execute_str in execute_strings:
         stdin, stdout, stderr = client.exec_command(execute_str)
-        if stderr:
-            for line in stderr:
-                try:
-                    # Process each error line in the remote output
-                    print(line)
-                except Exception as e:
-                    print(e)
-
-        for line in stdout:
-            try:
-                # Process each line in the remote output
-                print(line)
-            except Exception as e:
-                print(e)
+        get_stdout(self, stdout, stderr)
 
     print('Completed experiment in machine id {}'.format(machine_id))
