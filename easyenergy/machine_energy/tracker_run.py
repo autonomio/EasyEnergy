@@ -42,7 +42,6 @@ def tracker_run(self, docker=False):
 
         else:
             write_shell_script(self)
-            write_dockerfile(self)
             docker_ssh_file_transfer(self, client)
             docker_image_setup(self, client, machine_id)
             args = (self, client, machine_id)
