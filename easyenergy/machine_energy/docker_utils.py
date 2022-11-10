@@ -1,5 +1,5 @@
 import os
-from .utils import check_architecture, get_stdout
+from .utils import check_architecture, get_stdout, detect_machine
 
 
 def docker_install_commands(self):
@@ -101,6 +101,52 @@ def docker_ssh_file_transfer(self, client):
                 file)
 
     sftp.close()
+
+
+def amazon_linux_docker_cmds(self):
+    '''commands to install docker in amazon linux'''
+    cmds = ['sudo yum update -y',
+            'sudo amazon-linux-extras install docker',
+            'sudo service docker start',
+            ]
+    return cmds
+
+
+def docker_install(self, client, machine_id):
+    execute_str = 'sudo docker'
+    '''execute commands to install docker across any platform'''
+
+    stdin, stdout, stderr = client.exec_command(execute_str)
+    dockerflag = True
+    out = get_stdout(self, stdout, stderr)
+
+    if out == "docker_error":
+        dockerflag = False
+
+    self.machine_spec = detect_machine(self, client)
+
+    if not dockerflag:
+        install = ['chmod +x /tmp/{}/jako_docker.sh'.format(
+            self.experiment_name),
+            'sh /tmp/{}/jako_docker.sh'.format(
+                self.experiment_name)]
+
+        for execute_str in install:
+            stdin, stdout, stderr = client.exec_command(execute_str)
+            out = get_stdout(self, stdout, stderr)
+
+        if self.machine_spec == 'amazon_linux':
+            cmds = [
+                'sudo yum update -y',
+                'sudo yum install amazon-linux-extras',
+                'sudo amazon-linux-extras install docker',
+                'sudo service docker start',
+                'sudo groupadd docker',
+                'sudo usermod -aG docker $USER']
+
+            for cmd in cmds:
+                _, stdout, stderr = client.exec_command(cmd)
+                get_stdout(self, stdout, stderr)
 
 
 def docker_image_setup(self, client, machine_id):
