@@ -112,7 +112,8 @@ def amazon_linux_docker_cmds(self):
     return cmds
 
 
-def docker_install(self, client, machine_id):
+def docker_install(self, client):
+
     execute_str = 'sudo docker'
     '''execute commands to install docker across any platform'''
 
@@ -126,9 +127,9 @@ def docker_install(self, client, machine_id):
     self.machine_spec = detect_machine(self, client)
 
     if not dockerflag:
-        install = ['chmod +x /tmp/{}/jako_docker.sh'.format(
+        install = ['chmod +x /tmp/{}/easyenergy_docker.sh'.format(
             self.experiment_name),
-            'sh /tmp/{}/jako_docker.sh'.format(
+            'sh /tmp/{}/easyenergy_docker.sh'.format(
                 self.experiment_name)]
 
         for execute_str in install:
@@ -163,29 +164,9 @@ def docker_image_setup(self, client, machine_id):
 
     '''
 
-    execute_str = 'sudo docker'
     execute_strings = []
-    stdin, stdout, stderr = client.exec_command(execute_str)
-    stdout = str(stdout.read())
-    stderr = str(stderr.read())
 
-    dockerflag = True
-
-    if stdout:
-        if 'command not found' in stdout:
-            dockerflag = False
-    if stderr:
-        if 'command not found' in stderr:
-            dockerflag = False
-
-    if not dockerflag:
-
-        install = ['chmod +x /tmp/{}/easyenergy_docker.sh'.format(
-            self.experiment_name),
-            'sh /tmp/{}/easyenergy_docker.sh'.format(
-                self.experiment_name)]
-
-        execute_strings += install
+    docker_install(self, client)
 
     image_name = self.image_name
     pullstr = 'sudo docker pull {}'.format(image_name)
