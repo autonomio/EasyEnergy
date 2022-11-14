@@ -39,6 +39,7 @@ A config will look like this:
     }
   ],
   "run_local" : true
+  "run_docker": true
 }
 ```
 

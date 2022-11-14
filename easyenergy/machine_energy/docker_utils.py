@@ -1,4 +1,5 @@
 import os
+from .utils import check_architecture, get_stdout, detect_machine
 
 
 def docker_install_commands(self):
@@ -23,7 +24,7 @@ def write_shell_script(self):
             f.write(command + '\n')
 
 
-def write_dockerfile(self, platform='amd'):
+def write_dockerfile(self, arch):
     '''
     write Dockerfile for building docker images inside each machine
     '''
@@ -40,10 +41,10 @@ def write_dockerfile(self, platform='amd'):
     else:
         filename = 'easyenergy_custom_model.py'
 
-    if platform == 'amd':
+    if arch == 'amd':
         image_name = 'abhijithneilabraham/easyenergy_docker_image_amd64'
     else:
-        image_name = 'abhijithneilabraham/easyenergy_docker_image'
+        image_name = 'abhijithneilabraham/easyenergy_docker_image_arm64'
 
     self.image_name = image_name
     config_name = 'easyenergy_config.json'
@@ -78,8 +79,9 @@ def docker_ssh_file_transfer(self, client):
     '''Transfer the docker scripts to the remote machines'''
 
     experiment_name = self.experiment_name
+    arch = check_architecture(self, client)
 
-    write_dockerfile(self)
+    write_dockerfile(self, arch)
 
     sftp = client.open_sftp()
 
@@ -101,6 +103,53 @@ def docker_ssh_file_transfer(self, client):
     sftp.close()
 
 
+def amazon_linux_docker_cmds(self):
+    '''commands to install docker in amazon linux'''
+    cmds = ['sudo yum update -y',
+            'sudo amazon-linux-extras install docker',
+            'sudo service docker start',
+            ]
+    return cmds
+
+
+def docker_install(self, client):
+
+    execute_str = 'sudo docker'
+    '''execute commands to install docker across any platform'''
+
+    stdin, stdout, stderr = client.exec_command(execute_str)
+    dockerflag = True
+    out = get_stdout(self, stdout, stderr)
+
+    if out == "docker_error":
+        dockerflag = False
+
+    self.machine_spec = detect_machine(self, client)
+
+    if not dockerflag:
+        install = ['chmod +x /tmp/{}/easyenergy_docker.sh'.format(
+            self.experiment_name),
+            'sh /tmp/{}/easyenergy_docker.sh'.format(
+                self.experiment_name)]
+
+        for execute_str in install:
+            stdin, stdout, stderr = client.exec_command(execute_str)
+            out = get_stdout(self, stdout, stderr)
+
+        if self.machine_spec == 'amazon_linux':
+            cmds = [
+                'sudo yum update -y',
+                'sudo yum install amazon-linux-extras',
+                'sudo amazon-linux-extras install docker',
+                'sudo service docker start',
+                'sudo groupadd docker',
+                'sudo usermod -aG docker $USER']
+
+            for cmd in cmds:
+                _, stdout, stderr = client.exec_command(cmd)
+                get_stdout(self, stdout, stderr)
+
+
 def docker_image_setup(self, client, machine_id):
     '''Run the transmitted script remotely without args and show its output.
 
@@ -115,29 +164,9 @@ def docker_image_setup(self, client, machine_id):
 
     '''
 
-    execute_str = 'sudo docker'
     execute_strings = []
-    stdin, stdout, stderr = client.exec_command(execute_str)
-    stdout = str(stdout.read())
-    stderr = str(stderr.read())
 
-    dockerflag = True
-
-    if stdout:
-        if 'command not found' in stdout:
-            dockerflag = False
-    if stderr:
-        if 'command not found' in stderr:
-            dockerflag = False
-
-    if not dockerflag:
-
-        install = ['chmod +x /tmp/{}/easyenergy_docker.sh'.format(
-            self.experiment_name),
-            'sh /tmp/{}/easyenergy_docker.sh'.format(
-                self.experiment_name)]
-
-        execute_strings += install
+    docker_install(self, client)
 
     image_name = self.image_name
     pullstr = 'sudo docker pull {}'.format(image_name)
@@ -145,20 +174,7 @@ def docker_image_setup(self, client, machine_id):
 
     for execute_str in execute_strings:
         stdin, stdout, stderr = client.exec_command(execute_str)
-        if stderr:
-            for line in stderr:
-                try:
-                    # Process each error line in the remote output
-                    print(line)
-                except Exception as e:
-                    print(e)
-
-        for line in stdout:
-            try:
-                # Process each line in the remote output
-                print(line)
-            except Exception as e:
-                print(e)
+        get_stdout(self, stdout, stderr)
 
 
 def docker_machine_run(self, client, machine_id):
@@ -204,19 +220,6 @@ def docker_machine_run(self, client, machine_id):
 
     for execute_str in execute_strings:
         stdin, stdout, stderr = client.exec_command(execute_str)
-        if stderr:
-            for line in stderr:
-                try:
-                    # Process each error line in the remote output
-                    print(line)
-                except Exception as e:
-                    print(e)
-
-        for line in stdout:
-            try:
-                # Process each line in the remote output
-                print(line)
-            except Exception as e:
-                print(e)
+        get_stdout(self, stdout, stderr)
 
     print('Completed experiment in machine id {}'.format(machine_id))

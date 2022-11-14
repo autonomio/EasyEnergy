@@ -1,7 +1,7 @@
 from .utils import ssh_connect, ssh_file_transfer, ssh_run, run__tracker_local
 from .utils import ssh_get_files, compare_results
 
-from .docker_utils import write_shell_script, write_dockerfile
+from .docker_utils import write_shell_script
 from .docker_utils import docker_ssh_file_transfer, docker_image_setup
 from .docker_utils import docker_machine_run
 
@@ -42,7 +42,6 @@ def tracker_run(self, docker=False):
 
         else:
             write_shell_script(self)
-            write_dockerfile(self)
             docker_ssh_file_transfer(self, client)
             docker_image_setup(self, client, machine_id)
             args = (self, client, machine_id)
