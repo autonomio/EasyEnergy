@@ -44,7 +44,7 @@ def write_dockerfile(self, arch):
     if arch == 'amd':
         image_name = 'abhijithneilabraham/easyenergy_docker_image_amd64'
     else:
-        image_name = 'abhijithneilabraham/easyenergy_docker_image'
+        image_name = 'abhijithneilabraham/easyenergy_docker_image_arm64'
 
     self.image_name = image_name
     config_name = 'easyenergy_config.json'
