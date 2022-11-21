@@ -397,6 +397,9 @@ def ssh_get_files(self, client, machine_id):
     sftp = client.open_sftp()
     data_dir = self.data_dir
 
+    if not self.docker:
+        data_dir = '/tmp/energy_results/'
+
     try:
         sftp.chdir(data_dir)  # Test if dest dir exists
 
