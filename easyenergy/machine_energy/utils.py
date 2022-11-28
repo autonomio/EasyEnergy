@@ -444,7 +444,7 @@ def compare_results(self):
     cpu_count = []
     country_name = []
     country_iso_code = []
-    os = []
+    os_details = []
 
     for f in os.listdir(local_dir):
         if f.endswith('.csv') and f.startswith('machine'):
@@ -453,6 +453,7 @@ def compare_results(self):
 
             machine_id = int(f.split('_')[1])
 
+            machine_ids.append(machine_id)
             emissions.append(data['emissions'])
             emissions_rate.append(data['emissions_rate'])
             cpu_power.append(data['cpu_power'])
@@ -461,12 +462,19 @@ def compare_results(self):
             country_name.append(data['country_name'])
             country_iso_code.append(data['country_iso_code'])
             energy_consumption.append(data['energy_consumed'])
-            machine_ids.append(machine_id)
-            os.append(data['os'])
+            os_details.append(data['os'])
 
     res = pd.DataFrame({'machine_id': machine_ids,
                         'emissions': emissions,
-                        'energy_consumption': energy_consumption})
+                        'emissions_rate': emissions_rate,
+                        'cpu_power': cpu_power,
+                        'cpu_energy': cpu_energy,
+                        'cpu_count': cpu_count,
+                        'country_name': country_name,
+                        'country_iso_code': country_iso_code,
+                        'energy_consumption': energy_consumption,
+                        'os': os_details
+                        })
 
     save_folder = 'machine_energy_comparison/'
 
