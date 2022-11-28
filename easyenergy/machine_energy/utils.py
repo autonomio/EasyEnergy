@@ -438,14 +438,31 @@ def compare_results(self):
     emissions = []
     energy_consumption = []
     machine_ids = []
+    emissions_rate = []
+    cpu_power = []
+    cpu_energy = []
+    cpu_count = []
+    country_name = []
+    country_iso_code = []
+    os = []
 
     for f in os.listdir(local_dir):
         if f.endswith('.csv') and f.startswith('machine'):
+
             data = pd.read_csv(local_dir + '/' + f)
+
             machine_id = int(f.split('_')[1])
+
             emissions.append(data['emissions'])
+            emissions_rate.append(data['emissions_rate'])
+            cpu_power.append(data['cpu_power'])
+            cpu_energy.append(data['cpu_energy'])
+            cpu_count.append(data['cpu_count'])
+            country_name.append(data['country_name'])
+            country_iso_code.append(data['country_iso_code'])
             energy_consumption.append(data['energy_consumed'])
             machine_ids.append(machine_id)
+            os.append(data['os'])
 
     res = pd.DataFrame({'machine_id': machine_ids,
                         'emissions': emissions,
