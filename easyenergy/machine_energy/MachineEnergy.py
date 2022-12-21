@@ -65,4 +65,6 @@ class MachineEnergy:
         if 'run_docker' in config.keys():
             docker = config['run_docker']
 
+        self.docker = docker
+
         tracker_run(self, docker=docker)
